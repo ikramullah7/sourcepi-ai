@@ -14,7 +14,6 @@ are required. Actions are pinned to release commit SHAs.
 | Frontend / tests | The full Jest suite in CI mode, with coverage and the existing coverage threshold. |
 | Frontend / build | `npm run build` and a downloadable production frontend artifact. |
 | Go formatting and native version consistency | All tracked Go files pass `gofmt`; `build.sh --check-ort-version` verifies native version declarations. |
-| Go build, unit tests and startup checks | Go module verification, `build.sh --all`, help-command startup checks for API/admin/ingestor/syncer and CLI, then `build.sh --test` with race detection, vet and coverage. |
 | Docker Compose configuration | Resolve and validate the local deployment using checked-in example environment files, without reading real credentials or starting services. |
 | CI | Requires every job above to succeed. |
 
@@ -29,18 +28,17 @@ are marked `continue-on-error`, and no packages or failing tests are excluded.
 Existing formatting, type or test failures must be fixed before the aggregate
 `CI` check can turn green.
 
-## Go dependencies
+## Go checks and local testing
 
-The Go version comes from `go.mod`; the frontend uses Node.js 24. The native
-setup installs Clang/LLD 20 and checksum-verified CMake 4.4.5. The workflow verifies
-the selected linker and executes the built binaries to detect startup failures
-that a successful link cannot catch.
+The Go version comes from `go.mod`; the frontend uses Node.js 24. CI runs Go
+formatting and native version declaration checks only. It does not prepare native
+libraries, compile Go binaries, run Go unit tests, or check server startup.
 
-The repository's existing `tools/scripts/download_dev_deps.py` prepares the Go
-native libraries, DeepDoc resources and tokenizer assets through `uv`. This is a
-build preparation step; Python application services and Python tests are not run.
-Native dependencies and resources are cached by OS, architecture and dependency
-declarations. Go and npm use their lockfile-aware caches as well.
+For backend changes, prepare the native dependencies described in
+[the backend development guide](internal/development.md), then run
+`bash build.sh --all` and the relevant package-scoped tests through
+`bash build.sh --test ./path/to/package/...` locally. After a build, verify the
+changed server modes start with their help commands.
 
 The default Go unit tier needs no live external services. Integration and E2E
 tests require their documented real services and credentials and are not part of
@@ -50,8 +48,8 @@ local-only and is never selected by CI.
 
 ## Artifacts and branch protection
 
-Successful builds upload `frontend-dist` and `linux-amd64-binaries`; coverage
-reports upload when available as `frontend-coverage` and `go-coverage`. Retention
+Successful frontend builds upload `frontend-dist`; frontend coverage
+reports upload when available as `frontend-coverage`. Retention
 is seven days. The workflow builds and checks the code; it does not publish a
 container or deploy the application.
 
