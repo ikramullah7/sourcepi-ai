@@ -21,7 +21,7 @@ interface LlmCache {
   timestamp: number;
 }
 
-const CACHE_KEY = 'answerwhizai_llm_list_cache';
+const CACHE_KEY = 'sourcepi_llm_list_cache';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Get cached LLM list

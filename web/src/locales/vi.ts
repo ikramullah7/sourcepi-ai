@@ -118,10 +118,10 @@ export default {
       processDuration: 'Thời gian xử lý',
       progressMsg: 'Thông báo tiến trình',
       testingDescription:
-        'Thực hiện kiểm tra truy hồi để kiểm tra xem AnswerWhizAI có thể phục hồi nội dung mong muốn cho LLM không.Vui lòng lưu ý rằng các thay đổi được thực hiện ở đây sẽ không được lưu tự động. Nếu bạn điều chỉnh các cài đặt mặc định ở đây, chẳng hạn như trọng số tương tự của từ khóa, hãy đảm bảo rằng bạn cập nhật các cài đặt liên quan theo cách đồng bộ trong cài đặt trợ lý trò chuyện hoặc cài đặt toán tử thu hồi.',
+        'Thực hiện kiểm tra truy hồi để kiểm tra xem SourcePi AI có thể phục hồi nội dung mong muốn cho LLM không.Vui lòng lưu ý rằng các thay đổi được thực hiện ở đây sẽ không được lưu tự động. Nếu bạn điều chỉnh các cài đặt mặc định ở đây, chẳng hạn như trọng số tương tự của từ khóa, hãy đảm bảo rằng bạn cập nhật các cài đặt liên quan theo cách đồng bộ trong cài đặt trợ lý trò chuyện hoặc cài đặt toán tử thu hồi.',
       similarityThreshold: 'Ngưỡng tương đồng',
       similarityThresholdTip:
-        'Trong quá trình truy hồi, AnswerWhizAI sử dụng kết hợp giữa độ tương đồng từ khóa có trọng số và độ tương đồng cosin vectơ có trọng số, hoặc kết hợp giữa độ tương đồng từ khóa có trọng số và điểm tái xếp hạng có trọng số khi một mô hình tái xếp hạng được chọn. Tham số này đặt ngưỡng tương đồng giữa truy vấn của người dùng và các đoạn. Mọi đoạn có điểm tương đồng thấp hơn ngưỡng này sẽ bị loại khỏi kết quả. Theo mặc định, ngưỡng được đặt thành 20. Điều này có nghĩa là chỉ những đoạn có điểm tương đồng kết hợp từ 20 trở lên mới được truy hồi. Nếu trọng số tương đồng vectơ được đặt thành 0, ngưỡng này không được áp dụng.',
+        'Trong quá trình truy hồi, SourcePi AI sử dụng kết hợp giữa độ tương đồng từ khóa có trọng số và độ tương đồng cosin vectơ có trọng số, hoặc kết hợp giữa độ tương đồng từ khóa có trọng số và điểm tái xếp hạng có trọng số khi một mô hình tái xếp hạng được chọn. Tham số này đặt ngưỡng tương đồng giữa truy vấn của người dùng và các đoạn. Mọi đoạn có điểm tương đồng thấp hơn ngưỡng này sẽ bị loại khỏi kết quả. Theo mặc định, ngưỡng được đặt thành 20. Điều này có nghĩa là chỉ những đoạn có điểm tương đồng kết hợp từ 20 trở lên mới được truy hồi. Nếu trọng số tương đồng vectơ được đặt thành 0, ngưỡng này không được áp dụng.',
       vectorSimilarityWeight: 'Trọng số tương đồng từ khóa',
       vectorSimilarityWeightTip:
         'Đặt trọng số của độ tương đồng vectơ trong điểm tương đồng kết hợp, được sử dụng với độ tương đồng cosin vectơ hoặc điểm tái xếp hạng. Tổng của hai trọng số phải bằng 1.0.',
@@ -164,13 +164,13 @@ export default {
       changeSpecificCategory: 'Thay đổi danh mục cụ thể',
       uploadTitle: 'Nhấp hoặc kéo thả tệp vào khu vực này để tải lên',
       uploadDescription:
-        'AnswerWhizAI hỗ trợ tải lên tệp một lần hoặc theo lô. Đối với AnswerWhizAI triển khai cục bộ: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 1GB, với giới hạn tải lên theo lô là 32 tệp. Không có giới hạn về tổng số tệp trên mỗi tài khoản. Đối với hosted deployments: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 10MB, với mỗi tệp không vượt quá 10MB và tối đa là 128 tệp trên mỗi tài khoản.',
+        'SourcePi AI hỗ trợ tải lên tệp một lần hoặc theo lô. Đối với SourcePi AI triển khai cục bộ: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 1GB, với giới hạn tải lên theo lô là 32 tệp. Không có giới hạn về tổng số tệp trên mỗi tài khoản. Đối với hosted deployments: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 10MB, với mỗi tệp không vượt quá 10MB và tối đa là 128 tệp trên mỗi tài khoản.',
       chunk: 'Khối',
       bulk: 'Hàng loạt',
       cancel: 'Hủy bỏ',
       rerankModel: 'Mô hình xếp hạng lại',
       rerankPlaceholder: 'Vui lòng chọn',
-      rerankTip: `Tùy chọn. Nếu để trống, AnswerWhizAI sẽ sử dụng kết hợp giữa độ tương đồng từ khóa có trọng số và độ tương đồng cosine vector có trọng số; nếu chọn mô hình rerank, điểm rerank có trọng số sẽ thay thế độ tương đồng cosine vector có trọng số. Xin lưu ý rằng việc sử dụng mô hình rerank sẽ làm tăng đáng kể thời gian phản hồi của hệ thống.`,
+      rerankTip: `Tùy chọn. Nếu để trống, SourcePi AI sẽ sử dụng kết hợp giữa độ tương đồng từ khóa có trọng số và độ tương đồng cosine vector có trọng số; nếu chọn mô hình rerank, điểm rerank có trọng số sẽ thay thế độ tương đồng cosine vector có trọng số. Xin lưu ý rằng việc sử dụng mô hình rerank sẽ làm tăng đáng kể thời gian phản hồi của hệ thống.`,
       topK: 'Top-K',
       topKTip: `Sử dụng cùng với Rerank model, thiết lập này xác định số lượng đoạn văn cần gửi đến mô hình reranking được chỉ định.`,
       delimiter: 'Dấu phân cách cho phân đoạn văn bản',
@@ -449,7 +449,7 @@ export default {
       topN: 'Top N',
       topNTip: `Không phải tất cả các khối có điểm tương đồng vượt quá 'ngưỡng tương đồng' sẽ được cung cấp cho LLMs. LLM chỉ có thể xem 'Top N' khối này.`,
       variable: 'Biến',
-      variableTip: `Sử dụng cùng với các API quản lý trợ lý trò chuyện của AnswerWhizAI, các biến có thể giúp phát triển các chiến lược lời nhắc hệ thống linh hoạt hơn. Các biến được định nghĩa sẽ được sử dụng bởi 'Lời nhắc hệ thống' như một phần của lời nhắc cho LLM. {knowledge} là một biến đặc biệt được bảo lưu, đại diện cho các phần được truy xuất từ cơ sở tri thức được chỉ định, và tất cả các biến nên được đặt trong ngoặc nhọn {} trong 'Lời nhắc hệ thống'. Xem /help.html để biết thêm chi tiết.`,
+      variableTip: `Sử dụng cùng với các API quản lý trợ lý trò chuyện của SourcePi AI, các biến có thể giúp phát triển các chiến lược lời nhắc hệ thống linh hoạt hơn. Các biến được định nghĩa sẽ được sử dụng bởi 'Lời nhắc hệ thống' như một phần của lời nhắc cho LLM. {knowledge} là một biến đặc biệt được bảo lưu, đại diện cho các phần được truy xuất từ cơ sở tri thức được chỉ định, và tất cả các biến nên được đặt trong ngoặc nhọn {} trong 'Lời nhắc hệ thống'. Xem /help.html để biết thêm chi tiết.`,
       add: 'Thêm',
       key: 'Khóa',
       optional: 'Tùy chọn',
@@ -611,7 +611,7 @@ export default {
         'LLM trò chuyện mặc định mà tất cả các cơ sở kiến thức mới tạo sẽ sử dụng.',
       embeddingModel: 'Mô hình nhúng',
       embeddingModelTip:
-        'Mô hình nhúng mặc định cho từng cơ sở tri thức mới được tạo. Nếu bạn không tìm thấy mô hình nhúng từ danh sách thả xuống, hãy kiểm tra xem bạn có đang sử dụng phiên bản AnswerWhizAI slim (không bao gồm các mô hình nhúng) hay không, hoặc kiểm tra trang Nhà cung cấp mô hình để xem nhà cung cấp mô hình của bạn có hỗ trợ mô hình này không.',
+        'Mô hình nhúng mặc định cho từng cơ sở tri thức mới được tạo. Nếu bạn không tìm thấy mô hình nhúng từ danh sách thả xuống, hãy kiểm tra xem bạn có đang sử dụng phiên bản SourcePi AI slim (không bao gồm các mô hình nhúng) hay không, hoặc kiểm tra trang Nhà cung cấp mô hình để xem nhà cung cấp mô hình của bạn có hỗ trợ mô hình này không.',
       img2txtModel: 'Mô hình img2txt',
       img2txtModelTip:
         'Mô hình img2txt mặc định cho mỗi cơ sở tri thức mới được tạo. Nó mô tả một bức tranh hoặc video. Nếu bạn không thể tìm thấy mô hình từ danh sách thả xuống, hãy kiểm tra trang Nhà cung cấp mô hình để xem nhà cung cấp mô hình của bạn có hỗ trợ mô hình này không.',
@@ -800,7 +800,7 @@ export default {
       directory: 'Thư mục',
       uploadTitle: 'Nhấp hoặc kéo thả tệp vào khu vực này để tải lên',
       uploadDescription:
-        'AnswerWhizAI hỗ trợ tải lên tệp một lần hoặc theo lô. Đối với AnswerWhizAI triển khai cục bộ: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 1GB, với giới hạn tải lên theo lô là 32 tệp. Không có giới hạn về tổng số tệp trên mỗi tài khoản. Đối với hosted deployments: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 10MB, với mỗi tệp không vượt quá 10MB và tối đa là 128 tệp trên mỗi tài khoản.',
+        'SourcePi AI hỗ trợ tải lên tệp một lần hoặc theo lô. Đối với SourcePi AI triển khai cục bộ: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 1GB, với giới hạn tải lên theo lô là 32 tệp. Không có giới hạn về tổng số tệp trên mỗi tài khoản. Đối với hosted deployments: giới hạn tổng kích thước tệp cho mỗi lần tải lên là 10MB, với mỗi tệp không vượt quá 10MB và tối đa là 128 tệp trên mỗi tài khoản.',
       local: 'Tải lên cục bộ',
       s3: 'Tải lên S3',
       preview: 'Xem trước',

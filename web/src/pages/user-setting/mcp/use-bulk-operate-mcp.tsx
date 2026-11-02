@@ -35,9 +35,7 @@ export function useBulkOperateMCP(mcpList: IMcpServer[]) {
     const deletedIds = selectedList;
     const ret = await deleteMcpServer(deletedIds);
     if (ret.code === 0) {
-      setSelectedList((list) =>
-        list.filter((id) => !deletedIds.includes(id)),
-      );
+      setSelectedList((list) => list.filter((id) => !deletedIds.includes(id)));
     }
   }, [deleteMcpServer, selectedList]);
 

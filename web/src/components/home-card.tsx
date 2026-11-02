@@ -1,24 +1,9 @@
-/*
- *  Copyright 2026 The InfiniFlow Authors. All Rights Reserved.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 import { RAGFlowAvatar } from '@/components/ragflow-avatar';
+import { PixelMark } from '@/components/pixel-mark';
 import { TruncatedText } from '@/components/truncated-text';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { formatDate } from '@/utils/date';
-import { ReactNode } from 'react';
+import { KeyboardEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IProps {
@@ -30,17 +15,16 @@ interface IProps {
     release_time?: number;
   };
   onClick?: () => void;
-  moreDropdown: React.ReactNode;
+  moreDropdown: ReactNode;
   sharedBadge?: ReactNode;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   testId?: string;
   showReleaseTime?: boolean;
   extra?: ReactNode;
+  cover?: boolean;
 }
 
-function Time({ time }: { time: string | number | undefined }) {
-  return <p className="text-sm truncate">{formatDate(time)}</p>;
-}
+const Tones = ['forest', 'plum', 'orange', 'yellow'];
 
 export function HomeCard({
   data,
@@ -51,90 +35,91 @@ export function HomeCard({
   testId,
   showReleaseTime = false,
   extra,
+  cover = false,
 }: IProps) {
   const { t } = useTranslation();
-
+  const tone =
+    Tones[
+      Array.from(data.name).reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+        Tones.length
+    ];
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (
+      event.target === event.currentTarget &&
+      (event.key === 'Enter' || event.key === ' ')
+    ) {
+      event.preventDefault();
+      onClick?.();
+    }
+  };
   return (
     <Card
       as="article"
       data-testid={testId}
       data-agent-name={data.name}
-      onClick={() => {
-        // navigateToSearch(data?.id);
-        onClick?.();
-      }}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
       tabIndex={onClick ? 0 : undefined}
-      className={`px-2.5 py-4 flex gap-2 items-start group h-full w-full${
-        onClick ? ' hover:shadow-md cursor-pointer' : ''
-      }`}
+      aria-label={data.name}
+      className={`aw-library-card group flex h-full w-full min-w-0 flex-col overflow-hidden bg-bg-component !shadow-none ${onClick ? 'cursor-pointer' : ''}`}
     >
-      <div>
-        <RAGFlowAvatar
-          className="w-[32px] h-[32px]"
-          avatar={data.avatar}
-          name={data.name}
-        />
-      </div>
-
-      <div className="flex-1 w-0">
-        <CardHeader
-          as="header"
-          className="p-0 flex-1 flex flex-row items-center gap-2 space-y-0"
-        >
-          <CardTitle className="flex-1 inline-flex w-0 me-auto">
+      {cover && (
+        <div className={`aw-collection-cover aw-tone-${tone}`}>
+          <PixelMark className="size-12" />
+        </div>
+      )}
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-5">
+        <header className="flex min-w-0 items-start gap-3">
+          {!cover &&
+            (data.avatar ? (
+              <RAGFlowAvatar
+                className="size-10"
+                avatar={data.avatar}
+                name={data.name}
+              />
+            ) : (
+              <div className="aw-card-symbol">
+                <PixelMark className="size-6" />
+              </div>
+            ))}
+          <div className="min-w-0 flex-1">
             <TruncatedText
               as="h3"
-              className="flex-1 truncate text-base font-bold leading-snug"
+              className="truncate text-base font-semibold leading-snug tracking-tight"
               testId="agent-name"
               tooltip={data.name}
             >
               {data.name}
             </TruncatedText>
-
-            {icon}
-          </CardTitle>
-
-          <div>{moreDropdown}</div>
-        </CardHeader>
-
-        <CardContent className="p-0">
-          <div className="flex flex-col justify-between gap-1 flex-1 h-full w-[calc(100%-50px)]">
-            <section className="flex justify-between"></section>
-
-            <section className="flex flex-col gap-1 mt-1">
+            {data.description && (
               <TruncatedText
-                className="whitespace-nowrap overflow-hidden text-ellipsis"
+                className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary"
                 tooltip={data.description}
               >
                 {data.description}
               </TruncatedText>
-              {extra}
-              <div className="flex justify-between items-center min-w-0">
-                {showReleaseTime ? (
-                  <section className="text-sm text-text-secondary space-y-1 min-w-0">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="whitespace-nowrap">
-                        {t('flow.lastSavedAt')}:
-                      </span>
-                      <Time time={data.update_time}></Time>
-                    </div>
-                    {data.release_time && (
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="whitespace-nowrap">
-                          {t('flow.publishedAt')}:
-                        </span>
-                        <Time time={data.release_time}></Time>
-                      </div>
-                    )}
-                  </section>
-                ) : (
-                  <Time time={data.update_time}></Time>
-                )}
-                {sharedBadge}
-              </div>
-            </section>
+            )}
           </div>
-        </CardContent>
+          {icon}
+          {moreDropdown}
+        </header>
+        {extra}
+        {(data.update_time || data.release_time || sharedBadge) && (
+          <footer className="mt-auto flex min-w-0 flex-wrap items-center justify-between gap-2 border-t border-border-button pt-3 text-xs text-text-secondary">
+            <div className="min-w-0 space-y-1">
+              <p className="truncate">
+                {showReleaseTime && `${t('flow.lastSavedAt')}: `}
+                {formatDate(data.update_time)}
+              </p>
+              {showReleaseTime && !!data.release_time && (
+                <p className="truncate">
+                  {t('flow.publishedAt')}: {formatDate(data.release_time)}
+                </p>
+              )}
+            </div>
+            {sharedBadge}
+          </footer>
+        )}
       </div>
     </Card>
   );

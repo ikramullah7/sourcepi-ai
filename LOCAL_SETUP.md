@@ -1,8 +1,8 @@
-# AnswerWhizAI local setup
+# SourcePi AI local setup
 
 ## Current migration
 
-The source was copied from /Users/ikram/source/rag-ind/ragflow into /Users/ikram/source/answer-whiz-ai without copying Git history. The existing origin points to the new AnswerWhizAI repository. No upstream remote is configured.
+The source was copied from /Users/ikram/source/rag-ind/ragflow into /Users/ikram/source/answer-whiz-ai without copying Git history. The existing origin points to the new SourcePi AI repository. No upstream remote is configured.
 
 The existing Colima images and Docker data volumes remain in place. Local configuration and credentials were copied privately to docker/.env and docker/.env.local; neither is committed. Existing database credentials must not be regenerated.
 

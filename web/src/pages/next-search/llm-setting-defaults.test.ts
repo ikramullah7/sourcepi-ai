@@ -1,4 +1,7 @@
-import { llmSettingDefaults, resolveInitialLlmSetting } from './llm-setting-defaults';
+import {
+  llmSettingDefaults,
+  resolveInitialLlmSetting,
+} from './llm-setting-defaults';
 
 // The four generation parameters must fall back to the backend defaults
 // (LLM_SETTING_DEFAULTS in api/db/services/llm_service.py), not to 0: an

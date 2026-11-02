@@ -168,8 +168,8 @@ func TestPrintHelpDeepdoc(t *testing.T) {
 	cmd.Dir = dir
 	cmd.Env = append(os.Environ(), "RAGFLOW_TEST_DEEPDOC_HELP=1")
 	output, err := cmd.CombinedOutput()
-	if err == nil {
-		t.Fatalf("deepdoc --help did not exit non-zero: %s", output)
+	if err != nil {
+		t.Fatalf("deepdoc --help failed: %v\n%s", err, output)
 	}
 	if !strings.Contains(string(output), "DeepDoc server name") {
 		t.Errorf("deepdoc help missing the DeepDoc server name line:\n%s", output)
@@ -179,5 +179,56 @@ func TestPrintHelpDeepdoc(t *testing.T) {
 	}
 	if strings.Contains(string(output), "Sync service server name") {
 		t.Errorf("deepdoc help still shows the syncer's text:\n%s", output)
+	}
+}
+
+func TestMainInformationalFlagsExitStatus(t *testing.T) {
+	if os.Getenv("RAGFLOW_TEST_INFORMATIONAL_MAIN") == "1" {
+		for i, arg := range os.Args {
+			if arg == "--" {
+				os.Args = append([]string{os.Args[0]}, os.Args[i+1:]...)
+				main()
+				return
+			}
+		}
+		t.Fatal("missing subprocess argument separator")
+	}
+
+	type testCase struct {
+		name string
+		args []string
+		want string
+		fail bool
+	}
+	cases := []testCase{
+		{name: "help", args: []string{"--help"}, want: "Usage:"},
+		{name: "short help", args: []string{"-h"}, want: "Usage:"},
+		{name: "version", args: []string{"--version"}, want: "RAGFlow version:"},
+		{name: "short version", args: []string{"-v"}, want: "RAGFlow version:"},
+		{name: "missing mode", want: "Usage:", fail: true},
+		{name: "invalid flag", args: []string{"--api", "--invalid-flag"}, want: "Failed to parse arguments:", fail: true},
+	}
+	for _, mode := range []string{"api", "admin", "ingestor", "syncer", "deepdoc"} {
+		for _, flag := range []string{"--help", "--version"} {
+			want := "Usage:"
+			if flag == "--version" {
+				want = "RAGFlow version:"
+			}
+			cases = append(cases, testCase{name: mode + " " + flag, args: []string{"--" + mode, flag}, want: want})
+		}
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(t.Context(), 15*time.Second)
+			defer cancel()
+			args := append([]string{"-test.run=^TestMainInformationalFlagsExitStatus$", "--"}, tc.args...)
+			cmd := exec.CommandContext(ctx, os.Args[0], args...)
+			cmd.Dir = t.TempDir()
+			cmd.Env = append(os.Environ(), "RAGFLOW_TEST_INFORMATIONAL_MAIN=1")
+			output, err := cmd.CombinedOutput()
+			if (err != nil) != tc.fail || !strings.Contains(string(output), tc.want) {
+				t.Fatalf("args %v: error = %v, want failure %v and output %q\n%s", tc.args, err, tc.fail, tc.want, output)
+			}
+		})
 	}
 }

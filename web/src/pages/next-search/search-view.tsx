@@ -91,6 +91,7 @@ export default function SearchingView({
   }, [searchStr, setSearchText]);
 
   const isMultiLine = useAutoResizeTextarea(searchInputRef, searchText);
+  const handleBackToSearch = () => setIsSearching?.(false);
   return (
     <section
       className={cn(
@@ -100,18 +101,16 @@ export default function SearchingView({
       {/* search header */}
       <div
         className={cn(
-          'relative z-10 px-8 pt-8 flex  text-transparent justify-start items-start w-full h-full',
+          'relative z-10 p-4 sm:p-6 flex flex-col gap-6 text-text-primary items-start w-full h-full min-w-0',
         )}
       >
         <RAGFlowLogo
-          onClick={() => {
-            setIsSearching?.(false);
-          }}
+          onClick={handleBackToSearch}
           showEmbedIcon={showEmbedLogo}
         ></RAGFlowLogo>
         <div
           className={cn(
-            ' rounded-lg text-primary text-xl sticky flex flex-col justify-center  transform scale-100 ml-16 h-full flex-1 3xl:w-2/3 3xl:flex-none',
+            'flex min-h-0 min-w-0 w-full max-w-5xl mx-auto flex-1 flex-col text-text-primary text-sm',
           )}
         >
           <div className={cn('flex flex-col justify-start items-start w-full')}>
@@ -121,8 +120,7 @@ export default function SearchingView({
                 rows={1}
                 placeholder={t('search.searchGreeting')}
                 className={cn(
-                  'w-full rounded-full py-4 pl-4 !pr-[8rem] text-primary text-lg bg-bg-base border border-border-button resize-none scrollbar-thin outline-none focus-visible:ring-1 focus-visible:ring-text-primary/50 disabled:cursor-not-allowed disabled:opacity-50',
-                  isMultiLine ? 'rounded-3xl' : 'rounded-full',
+                  'w-full rounded-xl py-4 pl-4 !pr-[8rem] text-text-primary text-base bg-bg-component border border-border-button resize-none scrollbar-thin outline-none focus-visible:ring-1 focus-visible:ring-accent-primary disabled:cursor-not-allowed disabled:opacity-50',
                 )}
                 value={searchText}
                 onChange={(e) => {
@@ -178,20 +176,17 @@ export default function SearchingView({
             </div>
           </div>
           {/* search body */}
-          <div
-            className="w-full mt-5 overflow-auto scrollbar-thin "
-            style={{ height: 'calc(100vh - 250px)' }}
-          >
+          <div className="w-full min-h-0 flex-1 mt-5 overflow-auto scrollbar-thin">
             {searchData.search_config.summary && !isSearchStrEmpty && (
               <>
-                <div className="flex justify-start items-start text-text-primary text-2xl">
+                <div className="aw-section-title text-text-primary">
                   {t('search.AISummary')}
                 </div>
                 {isEmpty(answer) && sendingLoading ? (
                   <SkeletonCard className=" mt-2" />
                 ) : (
                   answer.answer && (
-                    <div className="border rounded-lg p-4 mt-3">
+                    <div className="border border-border-button rounded-lg bg-bg-component p-5 mt-3">
                       <ExpandableContent maxHeight={208}>
                         <MarkdownContent
                           loading={sendingLoading}
@@ -210,7 +205,7 @@ export default function SearchingView({
             )}
             {/* retrieval documents */}
             {!isSearchStrEmpty && !sendingLoading && (
-              <section className="flex justify-start items-center gap-4">
+              <section className="flex flex-wrap justify-start items-center gap-3">
                 <div className="w-44 ">
                   <RetrievalDocuments
                     selectedDocumentIds={selectedDocumentIds}

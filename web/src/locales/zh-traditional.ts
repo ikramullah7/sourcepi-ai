@@ -122,7 +122,7 @@ export default {
         '完成召回測試：確保你的設定可以從資料庫正確地召回文字區塊。請注意這裡的改動不會被自動保存。如果你調整了這裡的默認設置，比如關鍵詞相似度權重，請務必在聊天助手設置或者召回算子設置處同步更新相關設置。',
       similarityThreshold: '相似度閾值',
       similarityThresholdTip:
-        'AnswerWhizAI 在檢索時會使用加權關鍵詞相似度與加權向量餘弦相似度的組合；選擇重排序模型時，則使用加權關鍵詞相似度與加權重排序分數的組合。此參數設定使用者查詢與文字區塊之間的相似度閾值。相似度分數低於此閾值的文字區塊將從結果中排除。預設閾值為 20，這表示只有混合相似度分數達到 20 或以上的文字區塊才會被檢索。如果向量相似度權重設定為 0，則此閾值不適用。',
+        'SourcePi AI 在檢索時會使用加權關鍵詞相似度與加權向量餘弦相似度的組合；選擇重排序模型時，則使用加權關鍵詞相似度與加權重排序分數的組合。此參數設定使用者查詢與文字區塊之間的相似度閾值。相似度分數低於此閾值的文字區塊將從結果中排除。預設閾值為 20，這表示只有混合相似度分數達到 20 或以上的文字區塊才會被檢索。如果向量相似度權重設定為 0，則此閾值不適用。',
       vectorSimilarityWeight: '矢量相似度權重',
       vectorSimilarityWeightTip:
         '此項用於設定混合相似度分數中的向量相似度權重，該權重可套用於向量餘弦相似度或重排序分數。兩個權重的總和必須等於 1.0。',
@@ -312,7 +312,7 @@ export default {
         簡歷有多種格式，就像一個人的個性一樣，但我們經常必須將它們組織成結構化數據，以便於搜索。
         </p><p>
         我們不是將簡歷分塊，而是將簡歷解析為結構化數據。作為HR，你可以扔掉所有的簡歷，
-        您只需與<i>'AnswerWhizAI'</i>交談即可列出所有符合資格的候選人。
+        您只需與<i>'SourcePi AI'</i>交談即可列出所有符合資格的候選人。
         </p>
           `,
       table: `支持<p><b>XLSX</b>和<b>csv/txt</b>格式文件。</p><p>以下是一些提示： <ul> <li>对于Csv或Txt文件，列之间的分隔符为 <em><b>tab</b></em>。</li> <li>第一行必须是列标题。</li> <li>列标题必须是有意义的术语，以便我们的大語言模型能够理解。列举一些同义词时最好使用斜杠<i>'/'</i>来分隔，甚至更好使用方括号枚举值，例如 <i>“性別/性別（男性，女性）”</i>.<p>以下是标题的一些示例：<ol> <li>供应商/供货商<b>'tab'</b>顏色（黃色、紅色、棕色）<b>'tab'</b>性別（男、女）<b>'tab'</B>尺码（m、l、xl、xxl）</li> <li>姓名/名字<b>'tab'</b>電話/手機/微信<b>'tab'</b>最高学历（高中，职高，硕士，本科，博士，初中，中技，中专，专科，专升本，mpa，mba，emba）</li> </ol> </p> </li> <li>表中的每一行都将被视为一个块。</li> </ul>`,
@@ -710,7 +710,7 @@ export default {
         '默認的tts模型會被用於在對話過程中請求語音生成時使用。如未显示可选模型，請前往「模型供應商」頁面，確認你的模型供应商是否提供该模型。',
       embeddingModel: '嵌入模型',
       embeddingModelTip:
-        '如未顯示可選模型，請檢查你是否在使用 AnswerWhizAI slim 版（不含嵌入模型）；或前往「模型供應商」頁面，確認你的模型供應商是否提供該模型。',
+        '如未顯示可選模型，請檢查你是否在使用 SourcePi AI slim 版（不含嵌入模型）；或前往「模型供應商」頁面，確認你的模型供應商是否提供該模型。',
       img2txtModel: 'img2Txt模型',
       img2txtModelTip:
         '所有新創建的知識庫都將使用默認的 img2txt 模型。它可以描述圖片或視頻。如未顯示可選模型，請前往「模型供應商」頁面，確認你的模型供應商是否提供該模型。',
@@ -835,8 +835,8 @@ export default {
       sitemapFollowPdfLinksTip: '同時索引已擷取 HTML 頁面中連結的 PDF 檔案。',
       sitemapRestrictPdfToDomainTip: '僅跟隨與 sitemap 同網域下的 PDF 連結。',
       sitemapUserAgentTip:
-        '每次請求送出的 User-Agent 標頭。留空則使用 AnswerWhizAI-SitemapConnector/1.0。',
-      sitemapBatchSizeTip: '每批擷取並送到 AnswerWhizAI 的頁面數量。',
+        '每次請求送出的 User-Agent 標頭。留空則使用 SourcePiAI-SitemapConnector/1.0。',
+      sitemapBatchSizeTip: '每批擷取並送到 SourcePi AI 的頁面數量。',
       azure_devopsDescription: '連接 Azure DevOps 以同步儲存庫檔案和拉取請求。',
       bitbucketDescription: '連接 Bitbucket，同步 PR 內容。',
       zendeskDescription: '連接 Zendesk，同步工單、文章及其他內容。',

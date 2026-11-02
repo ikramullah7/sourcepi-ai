@@ -18,6 +18,7 @@ import { useFetchAppConf } from '@/hooks/logic-hooks';
 import { RefreshCcw } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { RAGFlowAvatar } from './ragflow-avatar';
+import { BrandLogo } from './brand-logo';
 import { Button } from './ui/button';
 
 type EmbedContainerProps = {
@@ -50,10 +51,10 @@ export function EmbedContainer({
             <div className="md:text-xl text-foreground">{title}</div>
           </div>
           <div className="flex items-center gap-2 md:ml-auto md:mr-3">
-            <img src="/logo.svg" alt="" className="h-6 md:h-8" />
-            <span className="hidden md:inline-block text-lg font-bold text-foreground">
-              {appConf.appName}
-            </span>
+            <BrandLogo
+              name={appConf.appName}
+              className="sourcepi-brand-embed"
+            />
           </div>
           {hideReset || (
             <Button

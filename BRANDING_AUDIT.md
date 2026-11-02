@@ -1,14 +1,14 @@
-# AnswerWhizAI branding audit
+# SourcePi AI branding audit
 
-Audit date: 28 October 2026. Scope: the full tracked project text, excluding actual local environment files, dependencies installed into node_modules, and generated builds. No credentials were printed or included in the occurrence inventory.
+Audit date: 29 October 2026. Scope: the full tracked project text, excluding actual local environment files, dependencies installed into node_modules, and generated builds. No credentials were printed or included in the occurrence inventory.
 
 ## Product branding completed
 
-The interface uses AnswerWhizAI in the application configuration, browser title, favicon, logo, authentication screens, welcome screens, search header, embedded pages, API panel titles, and translated product text. Upstream promotional navigation links have been removed.
+The interface uses SourcePi AI in the application configuration, browser title, favicon, logo, authentication screens, welcome screens, search header, embedded pages, API panel titles, and translated product text. Upstream promotional navigation links have been removed.
 
-This follow-up removes remaining product wording from connector tooltips, the agent framework prompt menu, the Traditional Chinese example, OAuth popup window names, browser theme storage, and model-list cache storage. Newly created sitemap connectors default to AnswerWhizAI-SitemapConnector/1.0. Existing saved connector settings remain unchanged. Cloud-hostname-specific UI conditions have been removed; the local deployment's previous behavior is retained.
+This follow-up removes remaining product wording from connector tooltips, the agent framework prompt menu, the Traditional Chinese example, OAuth popup window names, browser theme storage, and model-list cache storage. Newly created sitemap connectors default to SourcePiAI-SitemapConnector/1.0. Existing saved connector settings remain unchanged. Cloud-hostname-specific UI conditions have been removed; the local deployment's previous behavior is retained.
 
-Changing browser storage keys resets the locally remembered theme preference and causes a model-list cache refresh. It does not change accounts, provider credentials, datasets, chats, or server-side data.
+Saved browser theme preferences and model-list cache entries move to the SourcePi AI storage keys before the application starts. Existing values under the new keys take precedence. Accounts, provider credentials, datasets, chats, server-side data, the checkout path and the Git remote are unchanged.
 
 ## References that remain
 
@@ -24,7 +24,7 @@ These are real implementation or provenance references, not additional interface
 | OAuth and API contracts | Connector popup messages and MCP import platform values match the backend implementation. Renaming only frontend values would break those integrations. |
 | Frontend component identifiers | Internal component names and filenames include the old name. Some belong to the shared UI library, whose local instructions require explicit approval before modification. These identifiers are not displayed as product labels. |
 | External dependency coordinates | URLs and module names point to real upstream packages, resources, and model artifacts. Inventing replacement URLs would break downloads or builds. |
-| Source documentation, examples, and SDKs | Original project documentation and historical examples are retained as provenance; rewritten AnswerWhizAI documentation can replace active product guidance as the backend packaging is established. |
+| Source documentation, examples, and SDKs | Original project documentation and historical examples are retained as provenance; rewritten SourcePi AI documentation can replace active product guidance as the backend packaging is established. |
 | Original workflow definitions | Retained outside the active GitHub workflows directory. They cannot run automatically in the new repository. |
 | User content | Uploaded documents, user-defined chat names, and existing saved connector configurations are not rewritten. |
 

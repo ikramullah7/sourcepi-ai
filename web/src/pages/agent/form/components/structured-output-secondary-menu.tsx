@@ -16,7 +16,7 @@ import {
   useCallback,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { JsonSchemaDataType } from '../../constant';
+import { JsonSchemaDataType, VariableType } from '../../constant';
 import { useGetStructuredOutputByValue } from '../../hooks/use-build-structured-output';
 import { hasSpecificTypeChild } from '../../utils/filter-agent-structured-output';
 
@@ -26,7 +26,7 @@ type StructuredOutputSecondaryMenuProps = {
   className?: string;
   data: DataItem;
   click(option: { label: ReactNode; value: string }): void;
-  types?: JsonSchemaDataType[];
+  types?: (JsonSchemaDataType | VariableType)[];
 } & PropsWithChildren;
 
 export const StructuredOutputSecondaryMenu = forwardRef(

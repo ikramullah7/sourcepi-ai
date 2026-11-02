@@ -1,0 +1,148 @@
+name: SourcePi AI CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workflows:
+    name: Workflow validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate Actions expressions and embedded shell scripts
+        run: |
+          shellcheck .github/scripts/*.sh
+          bash .github/scripts/check-workflows.sh
+
+  frontend:
+    name: Frontend / ${{ matrix.check }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [format, lint, types, tests, build]
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Check formatting
+        if: matrix.check == 'format'
+        run: npm run format:check
+      - name: Lint
+        if: matrix.check == 'lint'
+        run: npm run lint
+      - name: Type-check
+        if: matrix.check == 'types'
+        run: npm run type-check
+      - name: Run all frontend tests with coverage
+        if: matrix.check == 'tests'
+        run: npm test -- --ci --runInBand --coverageReporters=text --coverageReporters=lcov
+      - name: Build production frontend
+        if: matrix.check == 'build'
+        run: npm run build
+      - name: Upload coverage
+        if: always() && matrix.check == 'tests'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: frontend-coverage
+          path: web/coverage/
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Upload production frontend
+        if: matrix.check == 'build'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: frontend-dist
+          path: web/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  go-format:
+    name: Go formatting and native version consistency
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Check all tracked Go files
+        run: |
+          mapfile -d '' files < <(git ls-files -z -- '*.go')
+          unformatted=$(gofmt -l "${files[@]}")
+          if [[ -n "$unformatted" ]]; then
+            printf 'Go files requiring gofmt:\n%s\n' "$unformatted"
+            exit 1
+          fi
+      - name: Verify ONNX Runtime version declarations
+        run: bash build.sh --check-ort-version
+
+  compose:
+    name: Docker Compose configuration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate local deployment with example configuration
+        run: |
+          validation_dir=$(mktemp -d)
+          trap 'rm -rf "$validation_dir"' EXIT
+          cp docker/docker-compose.yml docker/docker-compose-base.yml docker/docker-compose.local.yml "$validation_dir/"
+          cp docker/.env.example "$validation_dir/.env"
+          cp docker/.env.local.example "$validation_dir/.env.local"
+          docker compose \
+            --env-file "$validation_dir/.env" \
+            --env-file "$validation_dir/.env.local" \
+            -f "$validation_dir/docker-compose.yml" \
+            -f "$validation_dir/docker-compose.local.yml" \
+            config --quiet
+
+  ci:
+    name: CI
+    if: always()
+    needs: [workflows, frontend, go-format, compose]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      WORKFLOWS_RESULT: ${{ needs.workflows.result }}
+      FRONTEND_RESULT: ${{ needs.frontend.result }}
+      GO_FORMAT_RESULT: ${{ needs.go-format.result }}
+      COMPOSE_RESULT: ${{ needs.compose.result }}
+    steps:
+      - name: Require every check to pass
+        run: |
+          for result in "$WORKFLOWS_RESULT" "$FRONTEND_RESULT" "$GO_FORMAT_RESULT" "$COMPOSE_RESULT"; do
+            if [[ "$result" != success ]]; then
+              echo 'At least one required CI check failed, was cancelled, or was skipped.'
+              exit 1
+            fi
+          done

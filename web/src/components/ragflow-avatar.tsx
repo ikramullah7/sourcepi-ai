@@ -19,12 +19,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { forwardRef, memo, useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
-const PREDEFINED_COLORS = [
-  { from: '#4F6DEE', to: '#67BDF9' },
-  { from: '#38A04D', to: '#93DCA2' },
-  { from: '#C35F2B', to: '#EDB395' },
-  { from: '#633897', to: '#CBA1FF' },
-];
+const AvatarTones = ['forest', 'plum', 'orange', 'yellow'];
 
 const getStringHash = (str: string): number => {
   if (typeof str !== 'string') return 0;
@@ -51,12 +46,6 @@ const getInitials = (name?: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-const getColorForName = (name: string): { from: string; to: string } => {
-  const hash = getStringHash(name);
-  const index = hash % PREDEFINED_COLORS.length;
-  return PREDEFINED_COLORS[index];
-};
-
 export const RAGFlowAvatar = memo(
   forwardRef<
     React.ElementRef<typeof AvatarPrimitive.Root>,
@@ -66,13 +55,10 @@ export const RAGFlowAvatar = memo(
       isPerson?: boolean;
     }
   >(({ name, avatar, isPerson = false, className, ...props }, ref) => {
-    // Generate initial letter logic
-    const { initials, from, to } = useMemo(
+    const { initials, tone } = useMemo(
       () => ({
         initials: getInitials(name),
-        from: 'hsl(0, 0%, 30%)',
-        to: 'hsl(0, 0%, 80%)',
-        ...(name ? getColorForName(name) : {}),
+        tone: AvatarTones[getStringHash(name ?? '') % AvatarTones.length],
       }),
       [name],
     );
@@ -85,10 +71,7 @@ export const RAGFlowAvatar = memo(
       >
         <AvatarImage src={avatar} />
         <AvatarFallback
-          className="flex items-center justify-center bg-gradient-to-b text-white"
-          style={{
-            backgroundImage: `linear-gradient(to bottom, ${from}, ${to})`,
-          }}
+          className={`flex items-center justify-center aw-tone-${tone}`}
           role="presentation"
           aria-hidden="true"
         >

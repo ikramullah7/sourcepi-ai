@@ -473,7 +473,7 @@ export default {
       testSetting: '설정',
       retrievalTesting: '검색 테스트',
       retrievalTestingDescription:
-        'AnswerWhizAI가 LLM에 전달하고자 하는 내용을 정확히 가져올 수 있는지 확인하는 검색 테스트를 실행하세요.',
+        'SourcePi AI가 LLM에 전달하고자 하는 내용을 정확히 가져올 수 있는지 확인하는 검색 테스트를 실행하세요.',
       Parse: '파싱',
       dataset: '데이터셋',
       testing: '검색 테스트',
@@ -507,10 +507,10 @@ export default {
       noTestResultsForNotRuned:
         '아직 테스트가 실행되지 않았습니다. 결과가 여기에 표시됩니다.',
       testingDescription:
-        'AnswerWhizAI가 LLM에 전달하고자 하는 내용을 정확히 가져올 수 있는지 확인하는 검색 테스트를 실행하세요. 키워드 유사도 가중치나 유사도 임계값 등 기본 설정을 조정하여 최적의 결과를 얻었다면, 해당 변경 사항은 자동으로 저장되지 않으므로 채팅 어시스턴트 설정 또는 검색 에이전트 컴포넌트 설정에 적용해야 합니다.',
+        'SourcePi AI가 LLM에 전달하고자 하는 내용을 정확히 가져올 수 있는지 확인하는 검색 테스트를 실행하세요. 키워드 유사도 가중치나 유사도 임계값 등 기본 설정을 조정하여 최적의 결과를 얻었다면, 해당 변경 사항은 자동으로 저장되지 않으므로 채팅 어시스턴트 설정 또는 검색 에이전트 컴포넌트 설정에 적용해야 합니다.',
       similarityThreshold: '유사도 임계값',
       similarityThresholdTip:
-        'AnswerWhizAI는 검색 시 가중 키워드 유사도와 가중 벡터 코사인 유사도의 조합을 사용하거나, 리랭커 모델이 선택된 경우 가중 키워드 유사도와 가중 리랭킹 점수의 조합을 사용합니다. 이 매개변수는 사용자 쿼리와 청크 간의 유사도 임계값을 설정합니다. 유사도 점수가 이 임계값보다 낮은 청크는 결과에서 제외됩니다. 기본 임계값은 20입니다. 즉, 하이브리드 유사도 점수가 20 이상인 청크만 검색됩니다. 벡터 유사도 가중치가 0으로 설정된 경우 이 임계값은 적용되지 않습니다.',
+        'SourcePi AI는 검색 시 가중 키워드 유사도와 가중 벡터 코사인 유사도의 조합을 사용하거나, 리랭커 모델이 선택된 경우 가중 키워드 유사도와 가중 리랭킹 점수의 조합을 사용합니다. 이 매개변수는 사용자 쿼리와 청크 간의 유사도 임계값을 설정합니다. 유사도 점수가 이 임계값보다 낮은 청크는 결과에서 제외됩니다. 기본 임계값은 20입니다. 즉, 하이브리드 유사도 점수가 20 이상인 청크만 검색됩니다. 벡터 유사도 가중치가 0으로 설정된 경우 이 임계값은 적용되지 않습니다.',
       vectorSimilarityWeight: '벡터 유사도 가중치',
       vectorSimilarityWeightTip:
         '벡터 코사인 유사도 또는 리랭킹 점수와 함께 사용되는 결합 유사도 점수에서 벡터 유사도의 가중치를 설정합니다. 두 가중치의 합은 1.0이어야 합니다.',
@@ -554,14 +554,14 @@ export default {
       changeSpecificCategory: '특정 카테고리 변경',
       uploadTitle: '파일을 여기에 드래그 앤 드롭하여 업로드',
       uploadDescription:
-        '단일 또는 일괄 파일 업로드를 지원합니다. 로컬 배포 AnswerWhizAI의 경우: 업로드당 총 파일 크기 제한은 1GB이며, 일괄 업로드 제한은 32개 파일입니다. 계정당 총 파일 수에는 제한이 없습니다. hosted deployments의 경우: 업로드당 총 파일 크기 제한은 10MB이며, 각 파일은 10MB를 초과할 수 없고 계정당 최대 128개 파일입니다.',
+        '단일 또는 일괄 파일 업로드를 지원합니다. 로컬 배포 SourcePi AI의 경우: 업로드당 총 파일 크기 제한은 1GB이며, 일괄 업로드 제한은 32개 파일입니다. 계정당 총 파일 수에는 제한이 없습니다. hosted deployments의 경우: 업로드당 총 파일 크기 제한은 10MB이며, 각 파일은 10MB를 초과할 수 없고 계정당 최대 128개 파일입니다.',
       chunk: 'Chunk',
       bulk: '일괄',
       cancel: '취소',
       close: '닫기',
       rerankModel: 'Rerank 모델',
       rerankPlaceholder: '값 선택',
-      rerankTip: `선택 사항입니다. 비워두면 AnswerWhizAI는 가중 키워드 유사도와 가중 벡터 코사인 유사도의 조합을 사용합니다. rerank 모델을 선택하면 가중 rerank 점수가 가중 벡터 코사인 유사도를 대체합니다. rerank 모델을 사용하면 시스템 응답 시간이 크게 증가합니다.`,
+      rerankTip: `선택 사항입니다. 비워두면 SourcePi AI는 가중 키워드 유사도와 가중 벡터 코사인 유사도의 조합을 사용합니다. rerank 모델을 선택하면 가중 rerank 점수가 가중 벡터 코사인 유사도를 대체합니다. rerank 모델을 사용하면 시스템 응답 시간이 크게 증가합니다.`,
       topK: 'Top-K',
       topKTip: `Rerank 모델과 함께 사용하며, 지정된 reranking 모델로 전송할 텍스트 chunk 수를 정의합니다.`,
       delimiter: `텍스트 구분자`,
@@ -714,7 +714,7 @@ export default {
       tableColumnModeAuto: '자동',
       tableColumnModeManual: '수동',
       tableColumnModeAutoDescription:
-        '모든 컬럼이 chunk 텍스트에 포함되고 메타데이터로 저장됩니다 (AnswerWhizAI 기본값).',
+        '모든 컬럼이 chunk 텍스트에 포함되고 메타데이터로 저장됩니다 (SourcePi AI 기본값).',
       tableColumnRoles: '컬럼 역할',
       tableColumnRolesTip:
         'Chunk 텍스트에 포함할 컬럼(벡터 및 전문 검색용 인덱싱), 메타데이터에만 포함할 컬럼(필터링 가능), 또는 둘 다를 선택합니다. 변경 사항은 새 파싱에 적용되며, 기존 문서에 적용하려면 재파싱이 필요합니다.',
@@ -1014,7 +1014,7 @@ export default {
       topN: 'Top N',
       topNTip: `'유사도 임계값' 이상의 유사도 점수를 가진 모든 chunk가 LLM에 전송되는 것은 아닙니다. 검색된 chunk에서 'Top N'개를 선택합니다.`,
       variable: '변수',
-      variableTip: `AnswerWhizAI의 채팅 어시스턴트 관리 API와 함께 사용하면 변수를 통해 더 유연한 시스템 프롬프트 전략을 개발할 수 있습니다. 정의된 변수는 '시스템 프롬프트'에서 LLM의 프롬프트 일부로 사용됩니다. {knowledge}는 지정된 데이터셋에서 검색된 chunk를 나타내는 예약 특수 변수이며, 모든 변수는 '시스템 프롬프트'에서 중괄호 {}로 묶어야 합니다. 자세한 내용은 /help.html 를 참조하세요.`,
+      variableTip: `SourcePi AI의 채팅 어시스턴트 관리 API와 함께 사용하면 변수를 통해 더 유연한 시스템 프롬프트 전략을 개발할 수 있습니다. 정의된 변수는 '시스템 프롬프트'에서 LLM의 프롬프트 일부로 사용됩니다. {knowledge}는 지정된 데이터셋에서 검색된 chunk를 나타내는 예약 특수 변수이며, 모든 변수는 '시스템 프롬프트'에서 중괄호 {}로 묶어야 합니다. 자세한 내용은 /help.html 를 참조하세요.`,
       add: '추가',
       key: '키',
       optional: '선택 사항',
@@ -1095,7 +1095,7 @@ export default {
       extensionTitle: 'Chrome 확장 프로그램',
       tokenError: 'API 키를 먼저 만들어 주세요.',
       betaError:
-        '시스템 설정 페이지에서 AnswerWhizAI API 키를 먼저 획득해 주세요.',
+        '시스템 설정 페이지에서 SourcePi AI API 키를 먼저 획득해 주세요.',
       searching: '검색 중...',
       parsing: '파싱 중',
       uploading: '업로드 중',
@@ -1582,7 +1582,7 @@ export default {
       chatModelTip: '새로 생성된 각 데이터셋의 기본 LLM입니다.',
       embeddingModel: 'Embedding',
       embeddingModelTip:
-        '새로 생성된 각 데이터셋의 기본 임베딩 모델입니다. 드롭다운에서 임베딩 모델을 찾을 수 없으면 AnswerWhizAI 슬림 에디션(임베딩 모델 미포함)을 사용 중인지 확인하거나 모델 공급자 페이지에서 모델 제공업체가 이 모델을 지원하는지 확인하세요.',
+        '새로 생성된 각 데이터셋의 기본 임베딩 모델입니다. 드롭다운에서 임베딩 모델을 찾을 수 없으면 SourcePi AI 슬림 에디션(임베딩 모델 미포함)을 사용 중인지 확인하거나 모델 공급자 페이지에서 모델 제공업체가 이 모델을 지원하는지 확인하세요.',
       img2txtModel: 'VLM',
       img2txtModelTip:
         '새로 생성된 각 데이터셋의 기본 VLM입니다. 이미지나 동영상을 설명합니다. 드롭다운에서 모델을 찾을 수 없으면 모델 공급자 페이지에서 모델 제공업체가 이 모델을 지원하는지 확인하세요.',
@@ -1840,7 +1840,7 @@ export default {
       directory: '디렉토리',
       uploadTitle: '파일을 여기에 드래그 앤 드롭하여 업로드',
       uploadDescription:
-        '단일 또는 일괄 파일 업로드를 지원합니다. 로컬 배포 AnswerWhizAI의 경우: 업로드당 총 파일 크기 제한은 1GB이며, 일괄 업로드 제한은 32개 파일입니다. 계정당 총 파일 수에는 제한이 없습니다. hosted deployments의 경우: 업로드당 총 파일 크기 제한은 10MB이며, 각 파일은 10MB를 초과할 수 없고 계정당 최대 128개 파일입니다.',
+        '단일 또는 일괄 파일 업로드를 지원합니다. 로컬 배포 SourcePi AI의 경우: 업로드당 총 파일 크기 제한은 1GB이며, 일괄 업로드 제한은 32개 파일입니다. 계정당 총 파일 수에는 제한이 없습니다. hosted deployments의 경우: 업로드당 총 파일 크기 제한은 10MB이며, 각 파일은 10MB를 초과할 수 없고 계정당 최대 128개 파일입니다.',
       local: '로컬 업로드',
       s3: 'S3 업로드',
       preview: '미리보기',
@@ -3003,7 +3003,7 @@ Important structured information may include: names, dates, locations, events, k
     },
     admin: {
       loginTitle: '관리자 콘솔',
-      title: 'AnswerWhizAI',
+      title: 'SourcePi AI',
       confirm: '확인',
       close: '닫기',
       yes: '예',

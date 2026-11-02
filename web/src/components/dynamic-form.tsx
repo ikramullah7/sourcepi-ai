@@ -31,6 +31,7 @@ import {
   UseFormTrigger,
   useForm,
   useFormContext,
+  useController,
 } from 'react-hook-form';
 import { ZodSchema, z } from 'zod';
 
@@ -172,7 +173,8 @@ export interface DynamicFormRef {
 // Generate Zod validation schema based on field configurations
 export const generateSchema = (fields: FormFieldConfig[]): ZodSchema<any> => {
   const schema: Record<string, ZodSchema> = {};
-  const nestedSchemas: Record<string, Record<string, ZodSchema>> = {};
+  type SchemaTree = { [key: string]: ZodSchema | SchemaTree };
+  const nestedSchemas: SchemaTree = {};
 
   fields.forEach((field) => {
     let fieldSchema: ZodSchema;
@@ -294,19 +296,13 @@ export const generateSchema = (fields: FormFieldConfig[]): ZodSchema<any> => {
 
     if (field.name.includes('.')) {
       const keys = field.name.split('.');
-      const firstKey = keys[0];
-
-      if (!nestedSchemas[firstKey]) {
-        nestedSchemas[firstKey] = {};
-      }
-
-      let currentSchema = nestedSchemas[firstKey];
-      for (let i = 1; i < keys.length - 1; i++) {
-        const key = keys[i];
-        if (!currentSchema[key]) {
+      let currentSchema = nestedSchemas;
+      for (const key of keys.slice(0, -1)) {
+        const child = currentSchema[key];
+        if (!child || child instanceof z.ZodType) {
           currentSchema[key] = {};
         }
-        currentSchema = currentSchema[key];
+        currentSchema = currentSchema[key] as SchemaTree;
       }
 
       const lastKey = keys[keys.length - 1];
@@ -390,6 +386,11 @@ const generateDefaultValues = <T extends FieldValues>(
 
   return defaultValues as DefaultValues<T>;
 };
+function CustomFieldWithoutLabel({ field }: { field: FormFieldConfig }) {
+  const { field: fieldProps } = useController({ name: field.name });
+  return <div className="w-full">{field.render?.(fieldProps)}</div>;
+}
+
 // Render form fields
 export const RenderField = ({
   field,
@@ -400,7 +401,7 @@ export const RenderField = ({
 }) => {
   if (field.render) {
     if (field.type === FormFieldType.Custom && field.hideLabel) {
-      return <div className="w-full">{field.render({})}</div>;
+      return <CustomFieldWithoutLabel field={field} />;
     }
     return (
       <RAGFlowFormItem
@@ -712,7 +713,7 @@ const DynamicForm = {
             options,
           );
 
-          let combinedErrors = { ...zodResult.errors };
+          let combinedErrors: Record<string, unknown> = { ...zodResult.errors };
 
           const fieldErrors: Record<string, { type: string; message: string }> =
             {};
@@ -784,7 +785,7 @@ const DynamicForm = {
         });
 
         const subscriptions = Object.keys(dependencyMap).map((depField) => {
-          return form.watch((values: any, { name }) => {
+          return form.watch((_values: any, { name }) => {
             if (name === depField && dependencyMap[depField]) {
               dependencyMap[depField].forEach((dependentField) => {
                 form.trigger(dependentField as any);
@@ -964,9 +965,9 @@ const DynamicForm = {
         </Form>
       );
     },
-  ) as <T extends FieldValues>(
+  ) as (<T extends FieldValues>(
     props: DynamicFormProps<T> & { ref?: React.Ref<DynamicFormRef> },
-  ) => React.ReactElement,
+  ) => React.ReactElement) & { displayName?: string },
   SavingButton: ({
     submitLoading,
     buttonText,

@@ -139,7 +139,7 @@ export default function Dataset() {
   return (
     <Card
       as="article"
-      className="mb-5 mr-5 min-w-[880px] bg-transparent shadow-none"
+      className="m-4 sm:m-6 min-w-0 bg-bg-component shadow-none"
     >
       <CardHeader as="header" className="p-5 space-y-0">
         <ListFilterBar
@@ -150,12 +150,11 @@ export default function Dataset() {
           onChange={handleFilterSubmit}
           onOpenChange={onOpenChange}
           filters={filters}
-          className="items-end"
           leftPanel={
             <div>
-              <h1 className="leading-normal font-medium">
+              <span className="aw-section-title block">
                 {t('knowledgeDetails.subbarFiles')}
-              </h1>
+              </span>
               <p className="text-text-secondary text-sm font-normal">
                 {t('knowledgeDetails.datasetDescription')}
               </p>

@@ -12,18 +12,13 @@ import { decodeBlobText } from '../file-util';
 // txt-preview.tsx. The tests below cover every branch plus the small-buffer
 // edge cases that exercise the `Math.min(3, buffer.byteLength)` slice.
 //
-// We construct a minimal Blob-substitute that exposes only `arrayBuffer()`,
-// the single method decodeBlobText actually calls. This avoids depending on
-// the jsdom Blob polyfill (which in this project's test environment does
-// not implement `arrayBuffer()`); the production paths in csv-preview.tsx
-// and txt-preview.tsx pass the real browser Blob returned by axios.
-
-// Minimal Blob stand-in: only `arrayBuffer()` is needed by the function
-// under test. Cast to `Blob` so the call site type-checks.
 const blobOf = (bytes: Uint8Array): Blob =>
-  ({
-    arrayBuffer: () => Promise.resolve(bytes.buffer as ArrayBuffer),
-  }) as unknown as Blob;
+  new Blob([
+    bytes.buffer.slice(
+      bytes.byteOffset,
+      bytes.byteOffset + bytes.byteLength,
+    ) as ArrayBuffer,
+  ]);
 
 describe('decodeBlobText', () => {
   it('decodes UTF-8 with BOM and strips the leading U+FEFF', async () => {

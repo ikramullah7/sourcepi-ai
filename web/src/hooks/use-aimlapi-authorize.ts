@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Drives the AIMLAPI agent-authorization (OAuth 2.0 device grant) flow from the
  * provider dialog: start → open the AIMLAPI consent page in a popup → poll the
- * AnswerWhizAI backend until the key is issued. AnswerWhizAI never sees the user's AIMLAPI
+ * SourcePi AI backend until the key is issued. SourcePi AI never sees the user's AIMLAPI
  * credentials; the popup handles sign-in/consent on aimlapi.com.
  *
  * Mirrors the data-source connector OAuth pattern
@@ -39,7 +39,7 @@ export type AimlapiAuthorizeStatus =
 
 const TERMINAL_DENIED = new Set(['denied', 'rejected']);
 const TERMINAL_EXPIRED = new Set(['expired', 'cancelled', 'canceled']);
-const POPUP_NAME = 'answerwhizai-aimlapi-oauth';
+const POPUP_NAME = 'sourcepi-aimlapi-oauth';
 const POPUP_FEATURES = 'width=600,height=760';
 
 interface UseAimlapiAuthorizeOptions {

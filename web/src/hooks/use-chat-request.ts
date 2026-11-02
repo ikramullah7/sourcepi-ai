@@ -293,8 +293,15 @@ export const useFetchChat = () => {
 
 //#region Session
 
-export const useFetchSessionList = () => {
-  const { id } = useParams();
+const ChatKeys = {
+  sessionsRoot: () => [ChatApiAction.FetchSessionList] as const,
+  sessions: (chatId?: string) =>
+    [ChatApiAction.FetchSessionList, chatId] as const,
+};
+
+export const useFetchSessionList = (chatId?: string) => {
+  const { id: routeChatId } = useParams();
+  const id = chatId ?? routeChatId;
 
   const { searchString, handleInputChange, setSearchString } =
     useHandleSearchStrChange();
@@ -304,7 +311,7 @@ export const useFetchSessionList = () => {
     isFetching: loading,
     refetch,
   } = useQuery<IConversation[]>({
-    queryKey: [ChatApiAction.FetchSessionList, id],
+    queryKey: ChatKeys.sessions(id),
     initialData: [],
     gcTime: 0,
     refetchOnWindowFocus: false,
@@ -373,7 +380,7 @@ export const useCreateSession = () => {
       );
       if (data.code === 0) {
         queryClient.invalidateQueries({
-          queryKey: [ChatApiAction.FetchSessionList],
+          queryKey: ChatKeys.sessionsRoot(),
         });
       }
       return data;
@@ -407,7 +414,7 @@ export const useUpdateSession = () => {
       );
       if (data.code === 0) {
         queryClient.invalidateQueries({
-          queryKey: [ChatApiAction.FetchSessionList],
+          queryKey: ChatKeys.sessionsRoot(),
         });
         message.success(t(`message.modified`));
       }
@@ -435,7 +442,7 @@ export const useRemoveSessions = () => {
       );
       if (data.code === 0) {
         queryClient.invalidateQueries({
-          queryKey: [ChatApiAction.FetchSessionList],
+          queryKey: ChatKeys.sessionsRoot(),
         });
       }
       return data.code;

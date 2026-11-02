@@ -145,7 +145,6 @@ describe('BuiltinPipelineSection', () => {
         searchString=""
         showDivider
       />,
-      { wrapper },
     );
     expect(document.querySelector('.border-t')).not.toBeNull();
   });

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-import Spotlight from '@/components/spotlight';
 import message from '@/components/ui/message';
 import { useTranslate } from '@/hooks/common-hooks';
 import {
@@ -289,12 +288,11 @@ const SettingModelV2: FC = () => {
   );
 
   return (
-    <div className="flex w-full h-full border-[0.5px] border-border-button rounded-lg relative overflow-hidden">
-      <Spotlight />
-      <section className="flex flex-col gap-4 w-[320px] shrink-0 px-5 border-r-[0.5px] border-border-button overflow-auto scrollbar-auto">
+    <div className="aw-model-settings flex w-full h-full border border-border-button rounded-lg relative overflow-hidden bg-bg-component">
+      <section className="aw-provider-sidebar flex flex-col gap-4 shrink-0 px-4 border-r border-border-button overflow-auto scrollbar-auto">
         <Sidebar selection={selection} onSelect={setSelection} />
       </section>
-      <section className="flex-1 flex flex-col overflow-hidden">
+      <section className="min-w-0 flex-1 flex flex-col overflow-hidden">
         {selection === 'default' ? (
           <div className="flex-1 overflow-auto scrollbar-auto">
             <SystemSetting />

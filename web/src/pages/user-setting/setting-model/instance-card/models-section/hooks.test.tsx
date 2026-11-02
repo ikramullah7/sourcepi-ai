@@ -15,8 +15,12 @@
  */
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { useRef } from 'react';
+import {
+  act,
+  renderHook as testingRenderHook,
+  waitFor,
+} from '@testing-library/react';
+import { useRef, useState } from 'react';
 
 import { modelNameKey } from '@/utils/llm-util';
 import { useInstanceSaveState } from '../hooks';
@@ -29,6 +33,21 @@ import {
   useModelVerify,
   useResolveCreds,
 } from './hooks';
+
+function QueryWrapper({ children }: React.PropsWithChildren) {
+  const [client] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: { retry: false },
+          mutations: { retry: false },
+        },
+      }),
+  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+}
+const renderHook: typeof testingRenderHook = (callback, options) =>
+  testingRenderHook(callback, { wrapper: QueryWrapper, ...options });
 
 const mockListProviderModels = jest.fn();
 const mockUpdateProviderInstance = jest.fn();
@@ -58,7 +77,9 @@ jest.mock('@/hooks/use-llm-request', () => ({
   }),
 }));
 
-jest.mock('@/components/dynamic-form', () => ({}));
+jest.mock('@/components/dynamic-form', () => ({
+  FormFieldType: { Text: 'text', Password: 'password' },
+}));
 
 jest.mock('../../provider-schema/hooks', () => ({
   useProviderFields: jest.fn(),

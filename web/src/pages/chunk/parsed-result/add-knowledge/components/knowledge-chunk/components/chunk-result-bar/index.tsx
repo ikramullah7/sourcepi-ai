@@ -74,10 +74,7 @@ export default function ChunkResultBar({
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-          >
+          <Button variant="outline" size="icon">
             <LucideFilter />
           </Button>
         </PopoverTrigger>

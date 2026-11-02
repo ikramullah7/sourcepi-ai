@@ -21,6 +21,9 @@ import '../tailwind.css';
 import App from './app';
 import './global.less';
 import { initLanguage } from './locales/config';
+import { migrateBrandStorage } from './utils/migrate-brand-storage';
+
+migrateBrandStorage(localStorage);
 
 initLanguage().then(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(

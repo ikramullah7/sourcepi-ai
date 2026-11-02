@@ -15,7 +15,10 @@ export interface RunTooltipProps extends PropsWithChildren {
   tooltip?: string;
 }
 
-export const RunTooltip = ({ children, tooltip = 'flow.testRun' }: RunTooltipProps) => {
+export const RunTooltip = ({
+  children,
+  tooltip = 'flow.testRun',
+}: RunTooltipProps) => {
   const { t } = useTranslation();
   return (
     <Tooltip>

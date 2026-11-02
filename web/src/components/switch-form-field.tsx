@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { ReactNode } from 'react';
+import { ReactNode, useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 interface SwitchFormItemProps {
@@ -40,6 +40,7 @@ export function SwitchFormField({
   tooltip,
 }: SwitchFormItemProps) {
   const form = useFormContext();
+  const labelId = useId();
 
   return (
     <FormField
@@ -53,13 +54,14 @@ export function SwitchFormField({
             'justify-between': !vertical,
           })}
         >
-          <FormLabel className="w-fit" tooltip={tooltip}>
+          <FormLabel id={labelId} className="w-fit" tooltip={tooltip}>
             {label}
           </FormLabel>
           <FormControl>
             <Switch
               checked={field.value}
               onCheckedChange={field.onChange}
+              aria-labelledby={labelId}
               aria-readonly
               className="!m-0"
             />

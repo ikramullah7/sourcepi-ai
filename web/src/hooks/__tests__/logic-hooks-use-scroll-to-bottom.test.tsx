@@ -1,127 +1,81 @@
 jest.mock('eventsource-parser/stream', () => ({}));
+jest.mock('@/hooks/route-hook', () => ({}));
 
 import { act, renderHook } from '@testing-library/react';
 import { useScrollToBottom } from '../logic-hooks';
 
 function createMockContainer({ atBottom = true } = {}) {
-  const scrollTop = atBottom ? 100 : 0;
-  const clientHeight = 100;
-  const scrollHeight = 200;
-  const listeners = {};
-  return {
-    current: {
-      scrollTop,
-      clientHeight,
-      scrollHeight,
-      addEventListener: jest.fn((event, cb) => {
-        listeners[event] = cb;
-      }),
-      removeEventListener: jest.fn(),
-    },
-    listeners,
-  } as any;
+  const container = document.createElement('div');
+  Object.defineProperties(container, {
+    clientHeight: { value: 100 },
+    scrollHeight: { value: 200 },
+  });
+  container.scrollTop = atBottom ? 100 : 0;
+  container.scrollTo = jest.fn();
+  return { current: container };
 }
 
-// Helper to flush all timers and microtasks
-async function flushAll() {
-  jest.runAllTimers();
-  // Flush microtasks
-  await Promise.resolve();
-  // Sometimes, effects queue more timers, so run again
-  jest.runAllTimers();
-  await Promise.resolve();
+function flushFrame() {
+  act(() => jest.advanceTimersByTime(16));
 }
 
 describe('useScrollToBottom', () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  beforeEach(() => jest.useFakeTimers());
+  afterEach(() => jest.useRealTimers());
 
-  it('should set isAtBottom true when user is at bottom', () => {
-    const containerRef = createMockContainer({ atBottom: true });
-    const { result } = renderHook(() => useScrollToBottom([], containerRef));
+  it('is at the bottom when the container is pinned', () => {
+    const container = createMockContainer();
+    const { result } = renderHook(() => useScrollToBottom([], container));
     expect(result.current.isAtBottom).toBe(true);
   });
 
-  it('should set isAtBottom false when user is not at bottom', () => {
-    const containerRef = createMockContainer({ atBottom: false });
-    const { result } = renderHook(() => useScrollToBottom([], containerRef));
+  it('is not at the bottom when the user is reading earlier messages', () => {
+    const container = createMockContainer({ atBottom: false });
+    const { result } = renderHook(() => useScrollToBottom([], container));
     expect(result.current.isAtBottom).toBe(false);
   });
 
-  it('should scroll to bottom when isAtBottom is true and messages change', async () => {
-    const containerRef = createMockContainer({ atBottom: true });
-    const mockScroll = jest.fn();
-
-    function useTestScrollToBottom(messages: any, containerRef: any) {
-      const hook = useScrollToBottom(messages, containerRef);
-      hook.scrollRef.current = { scrollIntoView: mockScroll } as any;
-      return hook;
-    }
-
+  it('scrolls the container when messages change while pinned', () => {
+    const container = createMockContainer();
     const { rerender } = renderHook(
-      ({ messages }) => useTestScrollToBottom(messages, containerRef),
-      { initialProps: { messages: [] } },
+      ({ messages }) => useScrollToBottom(messages, container),
+      { initialProps: { messages: [] as string[] } },
     );
-
-    rerender({ messages: ['msg1'] });
-    await flushAll();
-
-    expect(mockScroll).toHaveBeenCalled();
-  });
-
-  it('should NOT scroll to bottom when isAtBottom is false and messages change', async () => {
-    const containerRef = createMockContainer({ atBottom: false });
-    const mockScroll = jest.fn();
-
-    function useTestScrollToBottom(messages: any, containerRef: any) {
-      const hook = useScrollToBottom(messages, containerRef);
-      hook.scrollRef.current = { scrollIntoView: mockScroll } as any;
-      console.log('HOOK: isAtBottom:', hook.isAtBottom);
-      return hook;
-    }
-
-    const { result, rerender } = renderHook(
-      ({ messages }) => useTestScrollToBottom(messages, containerRef),
-      { initialProps: { messages: [] } },
-    );
-
-    // Simulate user scrolls up before messages change
-    await act(async () => {
-      containerRef.current.scrollTop = 0;
-      containerRef.current.addEventListener.mock.calls[0][1]();
-      await flushAll();
-      // Advance fake timers by 10ms instead of real setTimeout
-      jest.advanceTimersByTime(10);
-      console.log('AFTER SCROLL: isAtBottom:', result.current.isAtBottom);
+    rerender({ messages: ['message'] });
+    flushFrame();
+    expect(container.current.scrollTo).toHaveBeenCalledWith({
+      top: 200,
+      behavior: 'auto',
     });
-
-    rerender({ messages: ['msg1'] });
-    await flushAll();
-
-    console.log('AFTER RERENDER: isAtBottom:', result.current.isAtBottom);
-
-    expect(mockScroll).not.toHaveBeenCalled();
-
-    // Optionally, flush again after the assertion to see if it gets called late
-    await flushAll();
   });
 
-  it('should indicate button should appear when user is not at bottom', () => {
-    const containerRef = createMockContainer({ atBottom: false });
-    const { result } = renderHook(() => useScrollToBottom([], containerRef));
-    // The button should appear in the UI when isAtBottom is false
+  it('does not pull the user down after they scroll up, even with a queued frame', () => {
+    const container = createMockContainer();
+    const { result, rerender } = renderHook(
+      ({ messages }) => useScrollToBottom(messages, container),
+      { initialProps: { messages: [] as string[] } },
+    );
+    act(() => {
+      container.current.scrollTop = 0;
+      container.current.dispatchEvent(new Event('scroll'));
+    });
+    rerender({ messages: ['message'] });
+    flushFrame();
+    expect(result.current.isAtBottom).toBe(false);
+    expect(container.current.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('shows the scroll-to-bottom affordance away from the bottom', () => {
+    const container = createMockContainer({ atBottom: false });
+    const { result } = renderHook(() => useScrollToBottom([], container));
     expect(result.current.isAtBottom).toBe(false);
   });
-});
 
-const originalRAF = global.requestAnimationFrame;
-beforeAll(() => {
-  global.requestAnimationFrame = (cb) => setTimeout(cb, 0);
-});
-afterAll(() => {
-  global.requestAnimationFrame = originalRAF;
+  it('cancels a pending scroll when unmounted', () => {
+    const container = createMockContainer();
+    const { unmount } = renderHook(() => useScrollToBottom([], container));
+    unmount();
+    flushFrame();
+    expect(container.current.scrollTo).not.toHaveBeenCalled();
+  });
 });

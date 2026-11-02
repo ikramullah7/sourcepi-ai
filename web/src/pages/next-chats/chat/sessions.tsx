@@ -50,7 +50,9 @@ export function Sessions({ handleConversationCardClick }: SessionProps) {
     searchString,
   } = useSelectDerivedConversationList();
   const { data } = useFetchChat();
-  const { visible, switchVisible } = useSetModalState(true);
+  const { visible, switchVisible } = useSetModalState(
+    window.innerWidth >= 1024,
+  );
   const { removeSessions } = useRemoveSessions();
   const { setConversationBoth } = useChatUrlParams();
   const { conversationId } = useGetChatSearchParams();
@@ -180,6 +182,7 @@ export function Sessions({ handleConversationCardClick }: SessionProps) {
           className="border-0"
           onClick={switchVisible}
           data-testid="chat-detail-sessions-open"
+          aria-label={t('chat.conversations')}
         >
           <RAGFlowAvatar
             avatar={data.icon}
@@ -193,7 +196,7 @@ export function Sessions({ handleConversationCardClick }: SessionProps) {
 
   return (
     <aside
-      className="p-5 w-[296px] flex flex-col"
+      className="p-4 w-[240px] shrink-0 flex flex-col border-r border-border-button"
       role="complementary"
       data-testid="chat-detail-sessions"
     >
@@ -236,6 +239,7 @@ export function Sessions({ handleConversationCardClick }: SessionProps) {
           className="border-0 ml-auto"
           onClick={switchVisible}
           data-testid="chat-detail-sessions-close"
+          aria-label={t('workspace.closeConversations')}
         >
           <LucidePanelLeftClose />
         </Button>

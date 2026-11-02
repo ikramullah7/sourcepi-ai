@@ -9,7 +9,12 @@ export function useAgentToolInitialValues() {
 
   const initializeAgentToolValues = useCallback(
     (operatorName: Operator) => {
-      const initialValues = initialFormValuesMap[operatorName];
+      const initialValues =
+        operatorName in initialFormValuesMap
+          ? initialFormValuesMap[
+              operatorName as keyof typeof initialFormValuesMap
+            ]
+          : {};
 
       switch (operatorName) {
         case Operator.Retrieval:

@@ -92,13 +92,13 @@ describe('isSingleInstanceOperator', () => {
     expect(isSingleInstanceOperator(Operator.Parser)).toBe(true);
     expect(isSingleInstanceOperator(Operator.Tokenizer)).toBe(true);
     expect(isSingleInstanceOperator(Operator.Compiler)).toBe(true);
+    expect(isSingleInstanceOperator(Operator.Extractor)).toBe(true);
     expect(isSingleInstanceOperator(Operator.TokenChunker)).toBe(true);
     expect(isSingleInstanceOperator(Operator.TitleChunker)).toBe(true);
     expect(isSingleInstanceOperator(Operator.GeneralChunker)).toBe(true);
   });
 
-  it('leaves multi-instance operators unchecked', () => {
-    expect(isSingleInstanceOperator(Operator.Extractor)).toBe(false);
+  it('leaves agent operators unrestricted', () => {
     expect(isSingleInstanceOperator(Operator.Agent)).toBe(false);
   });
 });
@@ -106,12 +106,15 @@ describe('isSingleInstanceOperator', () => {
 describe('buildPipelineNextOperators', () => {
   const noOperator = () => false;
 
-  it('always offers Extractor, which is multi-instance', () => {
+  it('offers Extractor only while its single slot is free', () => {
+    expect(
+      buildPipelineNextOperators(undefined, noOperator).operators,
+    ).toContain(Operator.Extractor);
     const hasExtractor = (operator: Operator) =>
       operator === Operator.Extractor;
     expect(
       buildPipelineNextOperators(undefined, hasExtractor).operators,
-    ).toContain(Operator.Extractor);
+    ).not.toContain(Operator.Extractor);
   });
 
   it('offers Compiler only when none is on the canvas', () => {

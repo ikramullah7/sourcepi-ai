@@ -38,7 +38,7 @@ export const PdfSheet = ({
   hideModal,
   documentId,
   chunk,
-  width = '50vw',
+  width = 'min(960px, 94vw)',
   height,
 }: IProps) => {
   const getDocumentUrl = useGetDocumentUrl(documentId);

@@ -32,7 +32,7 @@ const FormSchema = z.object({
 const outputList = buildOutputList(initialSearXNGValues.outputs);
 
 function SearXNGForm({ node }: INextOperatorForm) {
-  const { t } = useTranslate('flow');
+  useTranslate('flow');
   const defaultValues = useFormValues(initialSearXNGValues, node);
 
   const form = useForm<z.infer<typeof FormSchema>>({

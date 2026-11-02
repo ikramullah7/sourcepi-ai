@@ -182,13 +182,13 @@ function splitOperatorOutputValue(value?: string) {
   return { nodeId, output };
 }
 
-function filterDocGeneratorDownloadOutputOptions(
-  groups: Array<{
-    options: Array<{ value?: string } & Record<string, any>>;
-  }>,
+function filterDocGeneratorDownloadOutputOptions<
+  T extends { options: Array<{ value?: string }> },
+>(
+  groups: T[],
   allowDocGeneratorDownloadOutput: boolean,
   getOperatorTypeFromId: (nodeId?: string) => string | undefined,
-) {
+): T[] {
   return groups.map((group) => ({
     ...group,
     options: group.options.filter((option) => {
@@ -460,10 +460,8 @@ export const useGetComponentLabelByValue = (nodeId: string) => {
   return getLabel;
 };
 
-export function flatOptions(options: DefaultOptionType[]) {
-  return options.reduce<DefaultOptionType[]>((pre, cur) => {
-    return [...pre, ...cur.options];
-  }, []);
+export function flatOptions<T>(options: Array<{ options: T[] }>): T[] {
+  return options.flatMap((group) => group.options);
 }
 
 export function useFlattenQueryVariableOptions({

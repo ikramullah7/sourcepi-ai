@@ -62,7 +62,11 @@ describe('useUpdateAgentNodeTools (creation-time duplicate guard)', () => {
 
   it('selecting an already-added tool removes it instead of appending a duplicate', () => {
     seedStore([
-      { component_name: Operator.Retrieval, name: Operator.Retrieval, params: {} },
+      {
+        component_name: Operator.Retrieval,
+        name: Operator.Retrieval,
+        params: {},
+      },
     ]);
     const { result } = renderTools();
     act(() => result.current.updateNodeTools(Operator.Retrieval));

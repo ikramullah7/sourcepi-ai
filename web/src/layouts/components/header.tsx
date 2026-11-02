@@ -1,4 +1,5 @@
 import { RAGFlowAvatar } from '@/components/ragflow-avatar';
+import { BrandLogo } from '@/components/brand-logo';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,172 +12,109 @@ import {
   useFetchUserInfo,
   useListTenant,
 } from '@/hooks/use-user-setting-request';
-import { cn } from '@/lib/utils';
+import { supportedLanguages } from '@/locales/config';
 import { TenantRole } from '@/pages/user-setting/constants';
 import { Routes } from '@/routes';
-import { LucideChevronDown, LucideLanguages } from 'lucide-react';
-import React, { useMemo } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Languages, Plus, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { BellButton } from './bell-button';
 import { DesktopNavbar, MobileNavbar } from './global-navbar';
 import ThemeButton from './theme-button';
-import { useHeaderNavLayout } from './use-header-nav-layout';
 
-import { supportedLanguages } from '@/locales/config';
-
-export function Header({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
-  const { pathname } = useLocation();
+function LanguageOption({
+  code,
+  displayName,
+}: {
+  code: string;
+  displayName: string;
+}) {
   const changeLanguage = useChangeLanguage();
+  const handleSelect = () => changeLanguage(code);
+  return (
+    <DropdownMenuItem onSelect={handleSelect}>{displayName}</DropdownMenuItem>
+  );
+}
 
+export function Header() {
+  const { t } = useTranslation();
   const {
     data: { language = 'en', avatar, nickname },
   } = useFetchUserInfo();
-
   const { data: tenantData } = useListTenant();
-  const hasNotification = useMemo(
-    () => tenantData?.some((x) => x.role === TenantRole.Invite),
-    [tenantData],
+  const hasNotification = tenantData?.some(
+    (tenant) => tenant.role === TenantRole.Invite,
+  );
+  const currentLanguage = supportedLanguages.find(
+    (item) => item.code === language,
   );
 
-  const currentLanguage = supportedLanguages.find((x) => x.code === language);
-
-  const {
-    headerRef,
-    logoRef,
-    expandedRightMeasureRef,
-    navMeasureRef,
-    isCompact,
-  } = useHeaderNavLayout(`${hasNotification}-${language}`);
-
   return (
-    <>
-      <header
-        ref={headerRef}
-        key="app-navbar"
-        className={cn(
-          'w-full min-w-0 flex items-center gap-2 sm:gap-4',
-          className,
-        )}
-        {...props}
-      >
-        <div className="inline-flex shrink-0 items-center gap-2">
-          {isCompact && <MobileNavbar />}
-          <div ref={logoRef} className="inline-flex shrink-0 items-center">
-            <Link
-              to={Routes.Root}
-              aria-current={pathname === Routes.Root ? 'page' : undefined}
-              className="flex size-10 shrink-0 items-center justify-center"
-            >
-              <img
-                src={'/logo.svg'}
-                alt="AnswerWhizAI logo"
-                className="size-10"
-              />
-            </Link>
-          </div>
+    <header className="aw-sidebar">
+      <div className="aw-brand-row">
+        <div className="aw-mobile-menu">
+          <MobileNavbar />
         </div>
-
-        {!isCompact && (
-          <div className="flex min-w-0 flex-1 justify-center overflow-hidden">
-            <DesktopNavbar />
-          </div>
-        )}
-
-        {isCompact && <div className="flex-1" aria-hidden />}
-
-        <div
-          className={cn(
-            'flex shrink-0 items-center justify-end text-text-badge',
-            isCompact ? 'gap-0.5' : 'gap-4',
-          )}
-          data-testid="auth-status"
-        >
+        <Link to={Routes.Root}>
+          <BrandLogo />
+        </Link>
+      </div>
+      <Link to={Routes.Root} className="aw-new-chat">
+        <Plus className="size-5" />
+        {t('chat.newConversation')}
+      </Link>
+      <div className="aw-desktop-navigation">
+        <DesktopNavbar />
+      </div>
+      <div className="aw-account" data-testid="auth-status">
+        <div className="aw-account-tools">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className={cn(
-                  'size-10 shrink-0 px-0',
-                  !isCompact && 'size-auto gap-1 px-4',
-                )}
-                aria-label={currentLanguage?.displayName}
+                size="icon-lg"
+                className="max-sm:w-8"
+                aria-label={
+                  currentLanguage?.displayName ??
+                  t('workspace.language', 'Language')
+                }
+                title={currentLanguage?.displayName}
               >
-                {isCompact && <LucideLanguages className="size-5" />}
-                {!isCompact && (
-                  <>
-                    {currentLanguage?.displayName}
-                    <LucideChevronDown className="size-[1em]" />
-                  </>
-                )}
+                <Languages className="size-4" />
               </Button>
             </DropdownMenuTrigger>
-
             <DropdownMenuContent align="end">
-              {supportedLanguages.map((x) => (
-                <DropdownMenuItem
-                  key={x.code}
-                  onClick={() => changeLanguage(x.code)}
-                >
-                  {x.displayName}
-                </DropdownMenuItem>
+              {supportedLanguages.map((item) => (
+                <LanguageOption
+                  key={item.code}
+                  code={item.code}
+                  displayName={item.displayName}
+                />
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {!isCompact && (
-            <>{hasNotification && <BellButton className="!size-8" />}</>
-          )}
-
-          <ThemeButton className={cn(!isCompact && '!size-8')} />
-
-          <Link
-            to={Routes.UserSetting}
-            className={cn(
-              'relative flex size-10 shrink-0 items-center justify-center',
-              !isCompact && 'ms-3',
-            )}
-            data-testid="settings-entrypoint"
-          >
-            <RAGFlowAvatar
-              name={nickname}
-              avatar={avatar}
-              isPerson
-              className="size-8"
-            />
-          </Link>
+          <ThemeButton className="size-10 max-sm:w-8 lg:size-10" />
+          {hasNotification && <BellButton className="!size-10" />}
         </div>
-      </header>
-
-      <div
-        className="pointer-events-none invisible fixed -left-[9999px] top-0"
-        aria-hidden
-      >
-        <div ref={navMeasureRef}>
-          <DesktopNavbar />
-        </div>
-        <div
-          ref={expandedRightMeasureRef}
-          className="inline-flex shrink-0 items-center justify-end gap-4 text-text-badge"
+        <Link
+          to={Routes.UserSetting}
+          className="aw-profile"
+          data-testid="settings-entrypoint"
+          aria-label={t('workspace.settings', 'Settings')}
         >
-          <Button variant="ghost" className="size-auto gap-1 px-4">
-            {currentLanguage?.displayName}
-            <LucideChevronDown className="size-[1em]" />
-          </Button>
-          <ThemeButton className="!size-8" />
-          {hasNotification && <BellButton className="!size-8" />}
-          <div className="relative ms-3 flex size-10 shrink-0 items-center justify-center">
-            <RAGFlowAvatar
-              name={nickname}
-              avatar={avatar}
-              isPerson
-              className="size-8"
-            />
-          </div>
-        </div>
+          <RAGFlowAvatar
+            name={nickname}
+            avatar={avatar}
+            isPerson
+            className="size-9"
+          />
+          <span className="aw-profile-name">
+            {nickname || t('workspace.yourWorkspace', 'Your workspace')}
+            <small>{t('workspace.account', 'Account & preferences')}</small>
+          </span>
+          <ChevronRight className="aw-profile-chevron size-4" />
+        </Link>
       </div>
-    </>
+    </header>
   );
 }

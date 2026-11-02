@@ -1,20 +1,22 @@
 {
   "version": "1.0.0",
   "private": true,
-  "description": "AnswerWhizAI Web Frontend migrated to Vite",
+  "description": "SourcePi AI Web Frontend migrated to Vite",
   "author": "bill",
   "type": "module",
   "scripts": {
     "build": "vite build --mode production",
     "build-storybook": "storybook build",
     "dev": "vite --host",
+    "check": "npm run type-check && npm run format:check && npm run lint",
     "format": "oxfmt src",
     "format:check": "oxfmt --check src",
     "lint": "oxlint src",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test": "jest --no-cache --coverage",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

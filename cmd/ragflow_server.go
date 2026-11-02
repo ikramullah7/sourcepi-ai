@@ -324,13 +324,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	if arguments.HelpFlag || arguments.Mode == nil {
+	if arguments.HelpFlag {
 		printHelp(arguments)
-		os.Exit(1)
+		return
 	}
 
 	if arguments.VersionFlag {
 		fmt.Printf("RAGFlow version: %s\n", common.GetRAGFlowVersion())
+		return
+	}
+
+	if arguments.Mode == nil {
+		printHelp(arguments)
 		os.Exit(1)
 	}
 

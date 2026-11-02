@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FormatPreserEditor from './components/parse-editer';
+import { FormatPreserveEditorProps } from './components/parse-editer/interface';
 import { TimelineNodeType } from './constant';
 import { useChangeChunkTextMode } from './hooks';
 import { IChunk, IDslComponent } from './interface';
@@ -21,24 +22,33 @@ const ParserContainer = (props: IProps) => {
   const [selectedChunkIds, setSelectedChunkIds] = useState<string[]>([]);
   const [newChunkIndex, setNewChunkIndex] = useState<number | undefined>();
   const { textMode } = useChangeChunkTextMode();
-  const initialValue = useMemo(() => {
+  const initialValue = useMemo<
+    FormatPreserveEditorProps['initialValue'] | undefined
+  >(() => {
     const outputs = data?.value?.obj?.params?.outputs;
     const key = outputs?.output_format?.value;
-    if (!outputs || !key)
-      return {
-        key: '' as 'text' | 'html' | 'json' | 'chunks',
-        type: '',
-        value: [],
-      };
+    if (!outputs || !key) return undefined;
     const value = outputs[key as keyof typeof outputs]?.value;
     const type = outputs[key as keyof typeof outputs]?.type;
     console.log('outputs-->', outputs, data, key, value);
-    return {
-      key: key as 'text' | 'html' | 'json' | 'chunks',
-      type,
-      value,
-      params: data?.value?.obj?.params,
-    };
+    const params = data.value.obj.params;
+    if (key === 'json' || key === 'chunks') {
+      return {
+        key,
+        type: type ?? '',
+        value: Array.isArray(value) ? value : [],
+        params,
+      };
+    }
+    if (key === 'text' || key === 'html' || key === 'markdown') {
+      return {
+        key,
+        type: type ?? '',
+        value: typeof value === 'string' ? value : '',
+        params,
+      };
+    }
+    return undefined;
   }, [data]);
 
   const [initialText, setInitialText] = useState(initialValue);

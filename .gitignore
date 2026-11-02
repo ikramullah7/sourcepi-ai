@@ -279,11 +279,11 @@ ragflow_deps/*.zip
 # (symlinked into place from ~/.cache/ragflow-testdata; never committed)
 internal/deepdoc/native/testdata
 
-# AnswerWhizAI local credentials and runtime files
+# SourcePi AI local credentials and runtime files
 docker/.env.local
 docker/ragflow-logs/
 
-# AnswerWhizAI environment templates and frontend configuration
+# SourcePi AI environment templates and frontend configuration
 .env.*
 !.env.example
 !.env.local.example

@@ -1,18 +1,13 @@
 import { cn } from '@/lib/utils';
 
-/**
- * Basic page container:
- * - Full size
- * - Padding x=2.5rem top=0.75rem
- * - Auto scrollbar
- */
+/** Scrollable page surface with the shared responsive page spacing. */
 export function PageContainer({
   className,
   ...props
 }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) {
   return (
     <div
-      className={cn('size-full px-5 py-3 overflow-auto', className)}
+      className={cn('aw-page size-full overflow-auto', className)}
       {...props}
     />
   );

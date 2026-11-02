@@ -64,10 +64,18 @@ describe('transformParserParams vision settings', () => {
       ],
     } as any);
 
-    expect(result.image).toMatchObject({ ocr_enabled: false });
-    expect(result.image).not.toHaveProperty('parse_method');
-    expect(result.image).not.toHaveProperty('lang');
-    expect(result.image).not.toHaveProperty('system_prompt');
+    expect('image' in result ? result.image : undefined).toMatchObject({
+      ocr_enabled: false,
+    });
+    expect('image' in result ? result.image : undefined).not.toHaveProperty(
+      'parse_method',
+    );
+    expect('image' in result ? result.image : undefined).not.toHaveProperty(
+      'lang',
+    );
+    expect('image' in result ? result.image : undefined).not.toHaveProperty(
+      'system_prompt',
+    );
   });
 });
 

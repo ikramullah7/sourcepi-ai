@@ -89,16 +89,15 @@ export function countUnboundModel(
   };
 }
 
-export function bindUnboundModel(
-  dsl: DSL | Record<string, any> | undefined,
-  modelId: string,
-) {
+export function bindUnboundModel<
+  T extends DSL | Record<string, any> | undefined,
+>(dsl: T, modelId: string) {
   if (!dsl || !modelId) return dsl;
   const next = cloneDeep(dsl) as Record<string, any>;
   for (const { params } of walkModelParams(next)) {
     if (!(params.llm_id || params.model_id)) params.llm_id = modelId;
   }
-  return next as DSL;
+  return next as T;
 }
 
 function findAgentParams(

@@ -1,12 +1,19 @@
 import { Outlet } from 'react-router';
 import { Header } from './components/header';
+import { useTranslation } from 'react-i18next';
 
 export function RootLayoutContainer({ children }: React.PropsWithChildren) {
+  const { t } = useTranslation();
   return (
-    <div className="size-full min-w-0 grid grid-flow-col grid-cols-1 grid-rows-[auto_1fr]">
-      <Header className="px-5 py-4" />
+    <div className="aw-shell">
+      <a className="aw-skip-link" href="#workspace-content">
+        {t('workspace.skipToContent')}
+      </a>
+      <Header />
 
-      <main className="size-full min-w-0 overflow-hidden">{children}</main>
+      <main id="workspace-content" className="aw-main" tabIndex={-1}>
+        {children}
+      </main>
     </div>
   );
 }

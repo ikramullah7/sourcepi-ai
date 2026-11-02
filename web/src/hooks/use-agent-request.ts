@@ -527,7 +527,7 @@ export const useSetAgent = (
       id?: string;
       title?: string;
       dsl?: Record<string, any>;
-      avatar?: string;
+      avatar?: string | null;
       canvas_category?: string;
       release?: string;
       description?: string | null;

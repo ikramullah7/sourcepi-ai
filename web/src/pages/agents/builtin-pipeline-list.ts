@@ -16,7 +16,7 @@ import { useMemo } from 'react';
 // built-ins stay hidden rather than guessing. This mirrors how PR #20603
 // surfaces built-in pipelines only alongside user pipelines.
 export function shouldShowBuiltinForRaw(
-  rawCategory?: string | string[] | Record<string, string[]>,
+  rawCategory?: string | string[] | Record<string, unknown>,
 ): boolean {
   if (!rawCategory) {
     return true; // "All" view
@@ -72,7 +72,7 @@ export function toBuiltinListItem(
 // agents-list empty-state probe call this with the same arguments; React Query
 // dedupes the underlying catalog request by key, so the request fires once.
 export function useBuiltinItems(
-  rawCategory?: string | string[] | Record<string, string[]>,
+  rawCategory?: string | string[] | Record<string, unknown>,
   searchString?: string,
 ): { items: IBuiltinPipelineListItem[]; loading: boolean } {
   const { data: builtinData, loading } = useFetchBuiltinPipelines();

@@ -143,8 +143,8 @@ function SystemSetting() {
 
   return (
     <article className="rounded-lg w-full">
-      <header className="py-5 px-10">
-        <h2 className="text-2xl font-medium text-text-primary">
+      <header className="p-5 sm:p-8">
+        <h2 className="aw-title text-text-primary">
           {t('systemModelSettings')}
         </h2>
         <p className="mt-1 text-sm text-text-secondary ">
@@ -152,7 +152,7 @@ function SystemSetting() {
         </p>
       </header>
 
-      <div className="px-10 py-6 space-y-6 max-h-[70vh] overflow-y-auto ">
+      <div className="px-5 sm:px-8 py-6 space-y-6 overflow-y-auto">
         {llmList.map((item) => (
           <ModelFieldItem
             key={item.id}

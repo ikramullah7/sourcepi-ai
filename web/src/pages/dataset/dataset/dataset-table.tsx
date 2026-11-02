@@ -191,7 +191,6 @@ export function DatasetTable({
       {changeParserVisible && (
         <ChangeParserDialog
           record={changeParserRecord}
-          visible={changeParserVisible}
           onOk={onChangeParserOk}
           hideModal={hideChangeParserModal}
           loading={changeParserLoading}

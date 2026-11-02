@@ -20,11 +20,11 @@
     display: inline-block;
   }
   .messageItemSectionLeft {
-    width: 80%;
+    width: 100%;
   }
   .messageItemContent {
     display: inline-flex;
-    gap: 20px;
+    gap: 14px;
     width: 100%;
     min-width: 0;
   }
@@ -42,7 +42,6 @@
   .messageText {
     .chunkText();
     .messageTextBase();
-    // background-color: #e6f4ff;
     word-break: break-word;
   }
   .messageTextDark {
@@ -77,9 +76,9 @@
   .messageUserText {
     .chunkText();
     .messageTextBase();
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--bg-component);
     word-break: break-word;
-    text-align: justify;
+    text-align: start;
   }
   .messageEmpty {
     width: 300px;

@@ -10,14 +10,13 @@ export function CreateDirectoryFormFields() {
 
   return (
     <div className="space-y-4">
-      <RAGFlowFormItem
-        name="name"
-        label={t('common.name')}
-        required
-      >
+      <RAGFlowFormItem name="name" label={t('common.name')} required>
         <Input placeholder={t('common.pleaseInput')} autoComplete="off" />
       </RAGFlowFormItem>
-      <RAGFlowFormItem name="rule" label={t('knowledgeCompilation.directoryRule')}>
+      <RAGFlowFormItem
+        name="rule"
+        label={t('knowledgeCompilation.directoryRule')}
+      >
         <Textarea placeholder={t('common.pleaseInput')} />
       </RAGFlowFormItem>
     </div>

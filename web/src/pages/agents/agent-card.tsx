@@ -104,6 +104,7 @@ export function AgentCard({ data, showAgentRenameModal }: DatasetCardProps) {
 
   return (
     <HomeCard
+      cover
       testId="agent-card"
       data={{
         ...data,

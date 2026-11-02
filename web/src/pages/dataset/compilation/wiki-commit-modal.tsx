@@ -43,7 +43,9 @@ export function WikiCommitModal({
           >
             {(field) => (
               <Textarea
-                placeholder={t('knowledgeCompilation.versionContentPlaceholder')}
+                placeholder={t(
+                  'knowledgeCompilation.versionContentPlaceholder',
+                )}
                 {...field}
                 autoSize={{ minRows: 4, maxRows: 8 }}
               />

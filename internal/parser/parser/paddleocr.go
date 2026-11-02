@@ -183,7 +183,9 @@ func (c *PaddleOCRClient) submitJob(binary []byte, filename string, deadline tim
 	if c.AccessToken != "" {
 		req.Header.Set("Authorization", "Bearer "+c.AccessToken)
 	}
-	req = req.WithContext(withDeadline(req.Context(), deadline))
+	requestCtx, cancel := context.WithDeadline(req.Context(), deadline)
+	defer cancel()
+	req = req.WithContext(requestCtx)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -240,16 +242,19 @@ func (c *PaddleOCRClient) pollJob(jobID string, deadline time.Time) (map[string]
 			req.Header.Set("Authorization", "Bearer "+c.AccessToken)
 		}
 		req.Header.Set("Client-Platform", "ragflow")
-		req = req.WithContext(withDeadline(req.Context(), deadline))
+		requestCtx, cancel := context.WithDeadline(req.Context(), deadline)
+		req = req.WithContext(requestCtx)
 
 		resp, err := c.httpClient.Do(req)
 		if err != nil {
+			cancel()
 			return nil, fmt.Errorf("poll %s: %w", jobID, err)
 		}
-		defer resp.Body.Close()
 
 		if resp.StatusCode != 200 {
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+			resp.Body.Close()
+			cancel()
 			return nil, fmt.Errorf("poll HTTP %d: %s", resp.StatusCode, string(body))
 		}
 
@@ -261,7 +266,12 @@ func (c *PaddleOCRClient) pollJob(jobID string, deadline time.Time) (map[string]
 			State    string `json:"state"`
 			ErrorMsg string `json:"errorMsg"`
 		}
-		bodyBytes, _ := io.ReadAll(resp.Body)
+		bodyBytes, readErr := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		cancel()
+		if readErr != nil {
+			return nil, fmt.Errorf("read poll response: %w", readErr)
+		}
 		if err := json.Unmarshal(bodyBytes, &pollResp); err != nil {
 			return nil, fmt.Errorf("decode poll response: %w", err)
 		}
@@ -321,7 +331,9 @@ func (c *PaddleOCRClient) fetchResult(pollData map[string]any, deadline time.Tim
 	if c.AccessToken != "" {
 		req.Header.Set("Authorization", "Bearer "+c.AccessToken)
 	}
-	req = req.WithContext(withDeadline(req.Context(), deadline))
+	requestCtx, cancel := context.WithDeadline(req.Context(), deadline)
+	defer cancel()
+	req = req.WithContext(requestCtx)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -442,16 +454,6 @@ func removeMarkdownImages(md string) string {
 	// Strip HTML <img> and <div><img/></div> blocks
 	md = imgTagPattern.ReplaceAllString(md, "")
 	return strings.TrimSpace(md)
-}
-
-// withDeadline applies a deadline to a context, respecting the existing
-// deadline if it is sooner.
-func withDeadline(ctx context.Context, deadline time.Time) context.Context {
-	if d, ok := ctx.Deadline(); ok && d.Before(deadline) {
-		return ctx
-	}
-	newCtx, _ := context.WithDeadline(ctx, deadline)
-	return newCtx
 }
 
 func firstNonEmpty(a, b string) string {

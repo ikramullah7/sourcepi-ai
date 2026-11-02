@@ -1,6 +1,12 @@
 import { useSystemConfig } from '@/hooks/use-system-request';
+import { useLoginChannels } from '@/hooks/use-login-request';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Login from './index';
+
+const mockLogin = jest.fn();
+const mockRegister = jest.fn();
+const mockChannelLogin = jest.fn();
+const mockNavigate = jest.fn();
 
 jest.mock('@/hooks/use-system-request', () => ({
   useSystemConfig: jest.fn(),
@@ -11,31 +17,25 @@ jest.mock('@/hooks/auth-hooks', () => ({
 }));
 
 jest.mock('@/hooks/use-login-request', () => ({
-  useLogin: () => ({ login: jest.fn(), loading: false }),
-  useRegister: () => ({ register: jest.fn(), loading: false }),
-  useLoginChannels: () => ({ channels: [], loading: false }),
-  useLoginWithChannel: () => ({ login: jest.fn(), loading: false }),
+  useLogin: () => ({ login: mockLogin, loading: false }),
+  useRegister: () => ({ register: mockRegister, loading: false }),
+  useLoginChannels: jest.fn(),
+  useLoginWithChannel: () => ({ login: mockChannelLogin, loading: false }),
 }));
 
 jest.mock('react-router', () => ({
-  useNavigate: () => jest.fn(),
+  useNavigate: () => mockNavigate,
 }));
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
-jest.mock('@/utils', () => ({ rsaPsw: jest.fn() }));
+jest.mock('@/utils', () => ({ rsaPsw: () => 'encrypted-password' }));
 jest.mock('@/components/svg-icon', () => () => null);
-jest.mock('@/components/spotlight', () => () => null);
-jest.mock('./bg', () => ({ BgSvg: () => null }));
-jest.mock('./card', () => ({
-  __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => children,
-  FlipFaceContext: jest.requireActual('react').createContext('front'),
-}));
 
 const MockUseSystemConfig = jest.mocked(useSystemConfig);
+const MockUseLoginChannels = jest.mocked(useLoginChannels);
 const OriginalResizeObserver = globalThis.ResizeObserver;
 
 beforeAll(() => {
@@ -52,6 +52,13 @@ afterAll(() => {
 
 describe('login registration entry', () => {
   beforeEach(() => {
+    mockLogin.mockReset();
+    mockLogin.mockResolvedValue(0);
+    mockRegister.mockReset();
+    mockRegister.mockResolvedValue(0);
+    mockChannelLogin.mockReset();
+    mockNavigate.mockReset();
+    MockUseLoginChannels.mockReturnValue({ channels: [], loading: false });
     MockUseSystemConfig.mockReturnValue({ config: undefined, loading: true });
   });
 
@@ -110,5 +117,83 @@ describe('login registration entry', () => {
       screen.queryByTestId('auth-toggle-register'),
     ).not.toBeInTheDocument();
     expect(screen.getByTestId('auth-submit')).toBeEnabled();
+  });
+
+  it('submits the password through the existing login flow', async () => {
+    render(<Login />);
+    fireEvent.change(screen.getByTestId('auth-email'), {
+      target: { value: 'person@example.com' },
+    });
+    fireEvent.change(screen.getByTestId('auth-password'), {
+      target: { value: 'test-password' },
+    });
+    fireEvent.click(screen.getByTestId('auth-submit'));
+    await waitFor(() =>
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: 'person@example.com',
+        password: 'encrypted-password',
+      }),
+    );
+    expect(mockNavigate).toHaveBeenCalledWith('/');
+  });
+
+  it('shows only SSO actions when password login is disabled', () => {
+    MockUseSystemConfig.mockReturnValue({
+      config: { disablePasswordLogin: true, registerEnabled: true },
+      loading: false,
+    });
+    MockUseLoginChannels.mockReturnValue({
+      channels: [
+        { channel: 'company-sso', display_name: 'Company SSO', icon: 'sso' },
+      ],
+      loading: false,
+    });
+    render(<Login />);
+    expect(screen.queryByTestId('auth-form')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('auth-toggle-register'),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'workspace.signInWith' }),
+    );
+    expect(mockChannelLogin).toHaveBeenCalledWith('company-sso');
+  });
+
+  it('keeps a single active form and returns to login after registration', async () => {
+    MockUseSystemConfig.mockReturnValue({
+      config: { registerEnabled: true },
+      loading: false,
+    });
+    render(<Login />);
+    fireEvent.click(screen.getByTestId('auth-toggle-register'));
+    expect(screen.getAllByTestId('auth-form')).toHaveLength(1);
+    expect(screen.getByTestId('auth-password')).toHaveAttribute(
+      'autocomplete',
+      'new-password',
+    );
+    fireEvent.change(screen.getByTestId('auth-email'), {
+      target: { value: 'new@example.com' },
+    });
+    fireEvent.change(screen.getByTestId('auth-nickname'), {
+      target: { value: 'Taylor' },
+    });
+    fireEvent.change(screen.getByTestId('auth-password'), {
+      target: { value: 'test-password' },
+    });
+    fireEvent.click(screen.getByTestId('auth-submit'));
+    await waitFor(() =>
+      expect(mockRegister).toHaveBeenCalledWith({
+        nickname: 'Taylor',
+        email: 'new@example.com',
+        password: 'encrypted-password',
+      }),
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId('auth-nickname')).not.toBeInTheDocument(),
+    );
+    expect(screen.getByTestId('auth-password')).toHaveAttribute(
+      'autocomplete',
+      'current-password',
+    );
   });
 });

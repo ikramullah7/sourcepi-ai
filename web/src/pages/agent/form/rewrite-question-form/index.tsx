@@ -10,11 +10,18 @@ import {
 } from '@/components/ui/form';
 import { SelectWithSearch } from '@/components/originui/select-with-search';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { initialRewriteQuestionValues } from '../../constant';
+import { useFormValues } from '../../hooks/use-form-values';
+import { useWatchFormChange } from '../../hooks/use-watch-form-change';
 import { INextOperatorForm } from '../../interface';
 import { useOwnerTenantId } from '../../context';
 import { GoogleLanguageOptions } from '../../options';
 
-const RewriteQuestionForm = ({ form }: INextOperatorForm) => {
+const RewriteQuestionForm = ({ node }: INextOperatorForm) => {
+  const defaultValues = useFormValues(initialRewriteQuestionValues, node);
+  const form = useForm({ defaultValues });
+  useWatchFormChange(node?.id, form);
   const { t } = useTranslation();
   const ownerTenantId = useOwnerTenantId();
 

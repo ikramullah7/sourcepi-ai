@@ -41,7 +41,7 @@ func TestWorkerDispatcherBurstCompletesEveryTask(t *testing.T) {
 
 	db := testutil.SetupTestDB(t)
 	cleanupDB := testutil.ReplaceDBForTest(t, db)
-	defer cleanupDB()
+	t.Cleanup(cleanupDB)
 	taskIDs := seedBurstTasks(t, db, taskCount)
 
 	queue := testutil.SetupNatsEngine(t)
@@ -57,8 +57,8 @@ func TestWorkerDispatcherBurstCompletesEveryTask(t *testing.T) {
 	releaseFirst := func() {
 		release.Do(func() { close(releaseFirstTask) })
 	}
-	t.Cleanup(releaseFirst)
 	t.Cleanup(func() {
+		releaseFirst()
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 		ingestor.Stop(ctx)

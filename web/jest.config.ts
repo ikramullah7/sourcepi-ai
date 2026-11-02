@@ -1,12 +1,40 @@
 import type { Config } from 'jest';
 
+const MarkdownEsmPackages = [
+  'react-markdown',
+  '(?:rehype|remark|hast|mdast|micromark|unist|estree|vfile)(?:-[^/]+)?',
+  'hastscript',
+  'unified',
+  'bail',
+  'trough',
+  'devlop',
+  'is-[^/]+',
+  'property-information',
+  '(?:space|comma)-separated-tokens',
+  'web-namespaces',
+  'zwitch',
+  'ccount',
+  'decode-named-character-reference',
+  'character-entities(?:-[^/]+)?',
+  'stringify-entities',
+  'parse5',
+  'html-[^/]+',
+  'trim-lines',
+  'longest-streak',
+  'markdown-table',
+  'escape-string-regexp',
+  'style-to-(?:js|object)',
+  'collapse-white-space',
+].join('|');
+
 const config: Config = {
-  testEnvironment: 'jsdom',
+  testEnvironment: '<rootDir>/jest-environment.cjs',
   transform: {
-    // Local wrapper around esbuild-jest that also defines import.meta.env;
-    // see jest-esbuild-transformer.cjs
+    // Shared TypeScript/Vite preprocessing followed by Jest mock hoisting.
     '^.+\\.(ts|tsx|js|jsx)$': '<rootDir>/jest-esbuild-transformer.cjs',
   },
+  // Exercise the real Markdown parsing/sanitization pipeline in CommonJS Jest.
+  transformIgnorePatterns: [`/node_modules/(?!(?:${MarkdownEsmPackages})/)`],
   moduleNameMapper: {
     // Asset/style stubs must precede the `@/` alias — the alias rewrites
     // `@/assets/x.png` to a real path and only the first matching mapper runs.

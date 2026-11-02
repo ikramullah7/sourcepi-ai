@@ -1,4 +1,5 @@
 import { FileUploadProps } from '@/components/file-upload';
+import { UploadResponseDataType } from '@/interfaces/database/chat';
 import {
   useGetChatSearchParams,
   useUploadAndParseFile,
@@ -9,8 +10,10 @@ import { useSetConversation } from './use-set-conversation';
 
 export function useUploadFile() {
   const { uploadAndParseFile, loading, cancel } = useUploadAndParseFile();
-  const [currentFiles, setCurrentFiles] = useState<Record<string, any>[]>([]);
-  const [fileMap, setFileMap] = useState<Map<File, Record<string, any>>>(
+  const [currentFiles, setCurrentFiles] = useState<UploadResponseDataType[]>(
+    [],
+  );
+  const [fileMap, setFileMap] = useState<Map<File, UploadResponseDataType>>(
     new Map(),
   );
   const { setConversation } = useSetConversation();

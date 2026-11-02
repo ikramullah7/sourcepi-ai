@@ -157,6 +157,7 @@ export function ChatSettings({ hasSingleChatBox }: ChatSettingsProps) {
       {settingVisible || (
         <div className="p-5">
           <Button
+            aria-label={t('chat.chatSetting')}
             onClick={switchSettingVisible}
             disabled={!hasSingleChatBox}
             variant={'ghost'}
@@ -172,7 +173,9 @@ export function ChatSettings({ hasSingleChatBox }: ChatSettingsProps) {
         data-testid="chat-detail-settings"
         className={cn(
           'transition-[width] ease-out duration-300 flex-shrink-0 flex flex-col overflow-hidden',
-          settingVisible ? 'w-[440px]' : 'w-0',
+          settingVisible
+            ? 'aw-chat-settings-open w-[min(440px,94vw)] bg-bg-component border-l border-border-button'
+            : 'w-0',
         )}
       >
         {settingVisible && (

@@ -1,43 +1,48 @@
-// Jest transformer wrapping esbuild with the same options esbuild-jest was
-// configured with, plus `define: { 'import.meta.env': '{}' }` — esbuild-jest@0.5
-// does not forward esbuild's `define` option, and source files read Vite's
-// import.meta.env at module scope, which crashes under jest's cjs runtime.
-// Files containing jest.mock still go through esbuild-jest for its babel-based
-// mock hoisting.
-const path = require('node:path');
-const esbuild = require('esbuild');
+const ts = require('typescript');
 const esbuildJest = require('esbuild-jest');
 
-const esbuildJestTransformer = esbuildJest.createTransformer({
+const transformer = esbuildJest.createTransformer({
   sourcemap: true,
   loaders: { '.ts': 'tsx' },
 });
 
-const supportedLoaders = ['js', 'jsx', 'ts', 'tsx', 'json'];
+function replaceViteImports(context) {
+  const visit = (node) => {
+    if (
+      ts.isPropertyAccessExpression(node) &&
+      ts.isMetaProperty(node.expression) &&
+      node.expression.keywordToken === ts.SyntaxKind.ImportKeyword
+    ) {
+      if (node.name.text === 'env') {
+        return ts.factory.createObjectLiteralExpression();
+      }
+      if (node.name.text === 'glob') {
+        return ts.factory.createIdentifier('jestImportMetaGlob');
+      }
+    }
+    return ts.visitEachChild(node, visit, context);
+  };
+  return (sourceFile) => ts.visitNode(sourceFile, visit);
+}
 
 module.exports = {
   createTransformer() {
     return {
       process(content, filename, config, opts) {
-        if (content.indexOf('ock(') >= 0) {
-          return esbuildJestTransformer.process(content, filename, config, opts);
-        }
-        const ext = path.extname(filename).slice(1);
-        const loader = ext === 'ts' ? 'tsx' : supportedLoaders.includes(ext) ? ext : 'text';
-        const result = esbuild.transformSync(content, {
-          loader,
-          format: 'cjs',
-          target: 'es2018',
-          sourcemap: true,
-          sourcesContent: false,
-          sourcefile: filename,
-          define: {
-            'import.meta.env': '{}',
-            // Vite's glob import; jestImportMetaGlob is set in jest-setup.ts
-            'import.meta.glob': 'jestImportMetaGlob',
+        // Erase types while retaining JSX and ESM imports. Jest must hoist
+        // mocks before imports become require() calls or JSX becomes React calls.
+        const source = ts.transpileModule(content, {
+          fileName: filename,
+          compilerOptions: {
+            module: ts.ModuleKind.ESNext,
+            target: ts.ScriptTarget.ES2022,
+            jsx: ts.JsxEmit.Preserve,
+            inlineSourceMap: true,
+            inlineSources: true,
           },
+          transformers: { before: [replaceViteImports] },
         });
-        return { code: result.code, map: JSON.parse(result.map) };
+        return transformer.process(source.outputText, filename, config, opts);
       },
     };
   },

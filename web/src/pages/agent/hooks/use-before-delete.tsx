@@ -16,10 +16,10 @@ export function useBeforeDelete() {
     return getOperatorTypeFromId(node.id) === Operator.Agent;
   };
 
-  const handleBeforeDelete: OnBeforeDelete<RAGFlowNodeType> = async ({
+  const handleBeforeDelete = async ({
     nodes, // Nodes to be deleted
     edges, // Edges to be deleted
-  }) => {
+  }: Parameters<OnBeforeDelete<RAGFlowNodeType>>[0]) => {
     const toBeDeletedNodes = nodes.filter((node) => {
       const operatorType = node.data?.label as Operator;
       if (operatorType === Operator.Begin) {

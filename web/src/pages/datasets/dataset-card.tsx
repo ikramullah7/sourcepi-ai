@@ -21,6 +21,7 @@ export function DatasetCard({
 
   return (
     <HomeCard
+      cover
       data={{
         ...dataset,
         description: `${dataset.document_count} ${t('knowledgeDetails.files')}`,

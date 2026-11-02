@@ -208,15 +208,13 @@ export const deleteUser = (email: string) =>
 
 export const listServices = async () => {
   const { data } =
-    await request.get<
-      ResponseData<AdminService.ListServicesItem[] | GoServiceStatus[]>
-    >(adminListServices);
+    await request.get<ResponseData<GoServiceStatus[]>>(adminListServices);
   return data.code === 0 ? adaptServiceList(data.data) : [];
 };
 export const showServiceDetails = async (serviceId: number | string) => {
-  const { data } = await request.get<
-    ResponseData<AdminService.ServiceDetail | GoServiceStatus>
-  >(adminShowServiceDetails(encodeURIComponent(String(serviceId))));
+  const { data } = await request.get<ResponseData<GoServiceStatus>>(
+    adminShowServiceDetails(encodeURIComponent(String(serviceId))),
+  );
   return data.code === 0 ? adaptServiceDetail(data.data) : undefined;
 };
 

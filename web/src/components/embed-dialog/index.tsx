@@ -436,7 +436,7 @@ window.addEventListener('message',e=>{
                       name="widgetFooterText"
                       label="Footer text"
                     >
-                      <Input placeholder="Powered by AnswerWhizAI"></Input>
+                      <Input placeholder="Powered by SourcePi AI"></Input>
                     </RAGFlowFormItem>
                     <RAGFlowFormItem
                       name="widgetFooterLink"

@@ -69,7 +69,7 @@ export function ProviderHeaderBar({
         height={24}
         imgClass="size-6 text-text-primary"
       />
-      <span className="font-medium text-text-primary">{providerName}</span>
+      <h2 className="aw-section-title text-text-primary">{providerName}</h2>
       {apiLink && (
         <a
           href={apiLink}

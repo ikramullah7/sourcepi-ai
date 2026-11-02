@@ -9,6 +9,11 @@ import { IClientConversation } from '@/interfaces/database/chat';
 import { buildMessageUuidWithRole } from '@/utils/chat';
 import { useEffect } from 'react';
 import {
+  AnswerSources,
+  MobileAnswerSources,
+  getCitedSources,
+} from '@/components/answer-sources';
+import {
   useGetSendButtonDisabled,
   useSendButtonDisabled,
 } from '../../hooks/use-button-disabled';
@@ -53,7 +58,18 @@ export function SingleChatBox({ conversation }: IProps) {
 
   const messageReferences = useMessageReferences(
     messages,
-    conversation.reference,
+    conversation.id === conversationId ? conversation.reference : undefined,
+  );
+  const latestAnswer = messages
+    ?.slice()
+    .reverse()
+    .find((message) => message.role === MessageType.Assistant);
+  const latestReference = latestAnswer
+    ? messageReferences.get(latestAnswer)
+    : undefined;
+  const sources = getCitedSources(
+    latestAnswer?.content ?? '',
+    latestReference?.chunks ?? [],
   );
 
   useEffect(() => {
@@ -80,67 +96,73 @@ export function SingleChatBox({ conversation }: IProps) {
   ]);
 
   return (
-    <section className="flex flex-col h-full gap-4">
-      <div
-        ref={messageContainerRef}
-        className="p-5 flex-1 overflow-auto min-h-0 scrollbar-auto"
-      >
-        <div className="w-full pr-5">
-          {messages?.map((message, i) => (
-            <MessageItem
-              loading={
-                message.role === MessageType.Assistant &&
-                sendLoading &&
-                messages.length - 1 === i
-              }
-              key={buildMessageUuidWithRole(message)}
-              item={message}
-              nickname={userInfo.nickname}
-              avatar={userInfo.avatar}
-              avatarDialog={currentDialog.icon}
-              reference={messageReferences.get(message) ?? EmptyReference}
-              clickDocumentButton={clickDocumentButton}
-              index={i}
-              isLast={i === messages.length - 1}
-              removeMessageById={removeMessageById}
-              deleteDisabled={message.awaitingServerId}
-              regenerateMessage={regenerateMessage}
-              sendLoading={sendLoading}
-            />
-          ))}
+    <section className="aw-chat-layout" data-has-sources={sources.length > 0}>
+      <div className="flex min-w-0 min-h-0 flex-col">
+        <MobileAnswerSources sources={sources} onOpen={clickDocumentButton} />
+        <div
+          ref={messageContainerRef}
+          className="p-4 sm:p-6 flex-1 overflow-auto min-h-0 scrollbar-auto"
+        >
+          <div className="aw-chat-transcript">
+            {messages?.map((message, i) => (
+              <MessageItem
+                loading={
+                  message.role === MessageType.Assistant &&
+                  sendLoading &&
+                  messages.length - 1 === i
+                }
+                key={buildMessageUuidWithRole(message)}
+                item={message}
+                nickname={userInfo.nickname}
+                avatar={userInfo.avatar}
+                avatarDialog={currentDialog.icon}
+                reference={messageReferences.get(message) ?? EmptyReference}
+                clickDocumentButton={clickDocumentButton}
+                index={i}
+                isLast={i === messages.length - 1}
+                removeMessageById={removeMessageById}
+                deleteDisabled={message.awaitingServerId}
+                regenerateMessage={regenerateMessage}
+                sendLoading={sendLoading}
+              />
+            ))}
+          </div>
+          <div ref={scrollRef} />
         </div>
-        <div ref={scrollRef} />
-      </div>
 
-      <div className="p-5 pt-0">
-        <NextMessageInput
-          disabled={disabled}
-          sendDisabled={sendDisabled}
-          sendLoading={sendLoading}
-          value={value}
-          resize="vertical"
-          onInputChange={handleInputChange}
-          onPressEnter={handlePressEnter}
-          conversationId={conversationId}
-          createConversationBeforeUploadDocument={
-            createConversationBeforeUploadDocument
-          }
-          stopOutputMessage={stopOutputMessage}
-          onUpload={handleUploadFile}
-          isUploading={isUploading}
-          removeFile={removeFile}
-          showReasoning
-          showInternet={showInternet}
-        />
-        {visible && (
-          <PdfSheet
-            visible={visible}
-            hideModal={hideModal}
-            documentId={documentId}
-            chunk={selectedChunk}
-          ></PdfSheet>
-        )}
+        <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+          <div className="aw-chat-composer">
+            <NextMessageInput
+              disabled={disabled}
+              sendDisabled={sendDisabled}
+              sendLoading={sendLoading}
+              value={value}
+              resize="vertical"
+              onInputChange={handleInputChange}
+              onPressEnter={handlePressEnter}
+              conversationId={conversationId}
+              createConversationBeforeUploadDocument={
+                createConversationBeforeUploadDocument
+              }
+              stopOutputMessage={stopOutputMessage}
+              onUpload={handleUploadFile}
+              isUploading={isUploading}
+              removeFile={removeFile}
+              showReasoning
+              showInternet={showInternet}
+            />
+          </div>
+          {visible && (
+            <PdfSheet
+              visible={visible}
+              hideModal={hideModal}
+              documentId={documentId}
+              chunk={selectedChunk}
+            ></PdfSheet>
+          )}
+        </div>
       </div>
+      <AnswerSources sources={sources} onOpen={clickDocumentButton} />
     </section>
   );
 }

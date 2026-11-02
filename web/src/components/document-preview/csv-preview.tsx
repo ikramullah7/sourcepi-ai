@@ -243,7 +243,10 @@ const CSVFileViewer: React.FC<FileViewerProps> = ({ className, url }) => {
                   className="table-row"
                   style={{ height: startIdx * rowHeight }}
                 >
-                  <div className="table-cell border-b border-border-normal" style={{ width: naturalWidth || undefined }} />
+                  <div
+                    className="table-cell border-b border-border-normal"
+                    style={{ width: naturalWidth || undefined }}
+                  />
                 </div>
               )}
               {data.rows.slice(startIdx, endIdx).map((row, i) => {
@@ -268,18 +271,21 @@ const CSVFileViewer: React.FC<FileViewerProps> = ({ className, url }) => {
                     {/* Empty cells to complete ragged rows so the row's full-width
                         bottom border is drawn by the last padding cell instead
                         of disappearing through gaps between shorter rows. */}
-                    {Array.from({ length: maxCols - row.length }, (_, padIdx) => (
-                      <div
-                        key={`pad-${actualIndex}-${padIdx}`}
-                        className={classNames(
-                          'table-cell border-b border-border-normal',
-                          padIdx === maxCols - row.length - 1 && 'w-full',
-                        )}
-                        style={{ height: rowHeight }}
-                      >
-                        {''}
-                      </div>
-                    ))}
+                    {Array.from(
+                      { length: maxCols - row.length },
+                      (_, padIdx) => (
+                        <div
+                          key={`pad-${actualIndex}-${padIdx}`}
+                          className={classNames(
+                            'table-cell border-b border-border-normal',
+                            padIdx === maxCols - row.length - 1 && 'w-full',
+                          )}
+                          style={{ height: rowHeight }}
+                        >
+                          {''}
+                        </div>
+                      ),
+                    )}
                   </div>
                 );
               })}
@@ -289,7 +295,10 @@ const CSVFileViewer: React.FC<FileViewerProps> = ({ className, url }) => {
                   className="table-row"
                   style={{ height: (data.rows.length - endIdx) * rowHeight }}
                 >
-                  <div className="table-cell border-b border-border-normal" style={{ width: naturalWidth || undefined }} />
+                  <div
+                    className="table-cell border-b border-border-normal"
+                    style={{ width: naturalWidth || undefined }}
+                  />
                 </div>
               )}
             </div>

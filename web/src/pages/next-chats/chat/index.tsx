@@ -104,7 +104,7 @@ export default function Chat() {
   return (
     <RootLayoutContainer>
       <section className="h-full flex flex-col" data-testid="chat-detail">
-        <article className="flex flex-1 min-h-0 pb-9">
+        <article className="flex flex-1 min-h-0">
           <Sessions
             handleConversationCardClick={handleConversationCardClick}
           ></Sessions>
@@ -117,7 +117,7 @@ export default function Chat() {
                     'border-b-0.5 border-border-button': hasSingleChatBox,
                   })}
                 >
-                  <CardTitle className="flex justify-between items-center text-base gap-2">
+                  <CardTitle className="flex justify-between items-center text-base font-semibold tracking-tight gap-2">
                     <div className="truncate">{currentConversationName}</div>
 
                     <Button

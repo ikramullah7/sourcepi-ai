@@ -170,7 +170,7 @@ describe('addTenantParams — clearing model selections', () => {
           rerank_id: '',
           tenant_rerank_id: 'stale-tenant-model-id',
         },
-        '/api/v1/chats/chat-id',
+        '/api/v1/searches/search-id',
       ),
     ).toEqual({
       rerank_id: '',
@@ -182,8 +182,13 @@ describe('addTenantParams — clearing model selections', () => {
     expect(
       addTenantParams(
         { tenant_rerank_id: 'existing-tenant-model-id' },
-        '/api/v1/chats/chat-id',
+        '/api/v1/searches/search-id',
       ),
     ).toEqual({ tenant_rerank_id: 'existing-tenant-model-id' });
   });
+});
+
+it('leaves chat model normalization to the Go API', () => {
+  const payload = { rerank_id: '', tenant_rerank_id: 'stale-id' };
+  expect(addTenantParams(payload, '/api/v1/chats/chat-id')).toBe(payload);
 });

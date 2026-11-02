@@ -157,7 +157,7 @@ export const updateAgent = (
   params: {
     title?: string;
     dsl?: Record<string, any>;
-    avatar?: string;
+    avatar?: string | null;
     description?: string | null;
     permission?: string;
     release?: string;

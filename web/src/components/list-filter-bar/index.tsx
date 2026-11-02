@@ -108,11 +108,11 @@ export default function ListFilterBar({
   return (
     <div
       className={cn(
-        'flex min-w-0 flex-col gap-3 md:flex-row md:items-center md:justify-between',
+        'aw-list-toolbar flex min-w-0 flex-col gap-3 xl:flex-row xl:items-center xl:justify-between',
         className,
       )}
     >
-      <h1 className="flex min-w-0 shrink-0 items-center gap-2.5 text-2xl font-semibold">
+      <h1 className="aw-title flex min-w-0 items-center gap-2.5">
         {typeof icon === 'string' ? (
           <HomeIcon
             name={`${icon}`}
@@ -128,13 +128,13 @@ export default function ListFilterBar({
         className={cn(
           'min-w-0 w-full items-center gap-2',
           preChildren
-            ? 'flex flex-wrap md:flex-nowrap md:w-auto md:shrink-0 md:gap-4'
+            ? 'flex flex-wrap xl:w-auto xl:gap-3'
             : cn(
                 'grid',
                 hasFilter
                   ? 'grid-cols-[auto_minmax(0,1fr)_auto]'
                   : 'grid-cols-[minmax(0,1fr)_auto]',
-                'md:flex md:w-auto md:shrink-0 md:gap-4',
+                'sm:flex xl:w-auto xl:gap-3',
               ),
         )}
         role="toolbar"
@@ -158,7 +158,7 @@ export default function ListFilterBar({
             className={cn(
               'min-w-0 w-full',
               preChildren ? 'flex-1 basis-32' : '',
-              'md:w-32',
+              'sm:w-48',
             )}
             role="searchbox"
           />

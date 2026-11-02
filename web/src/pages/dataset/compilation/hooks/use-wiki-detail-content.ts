@@ -163,13 +163,11 @@ export function useWikiDetailContent({
   const { documents } = useFetchDocumentsByIds(pageData?.source_doc_ids ?? []);
 
   const referenceDocuments = useMemo<Docagg[]>(() => {
-    return documents.map(
-      (doc): Docagg => ({
-        doc_id: doc.id,
-        doc_name: doc.name,
-        count: 0,
-      }),
-    );
+    return documents.map((doc): Docagg => ({
+      doc_id: doc.id,
+      doc_name: doc.name,
+      count: 0,
+    }));
   }, [documents]);
 
   const handleExport = useCallback(() => {

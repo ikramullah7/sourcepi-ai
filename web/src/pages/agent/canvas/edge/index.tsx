@@ -93,13 +93,7 @@ function InnerButtonEdge({
       !target.startsWith(Operator.Tool) &&
       !isTargetPlaceholder
     );
-  }, [
-    data?.isHovered,
-    isTargetPlaceholder,
-    selected,
-    sourceHandleId,
-    target,
-  ]);
+  }, [data?.isHovered, isTargetPlaceholder, selected, sourceHandleId, target]);
 
   const activeMarkerEnd =
     selected || !isEmpty(showHighlight) || isTargetPlaceholder

@@ -327,13 +327,27 @@ const MarkdownContent = ({
           if (!hasReference && !(loading && match.startsWith('[ID:'))) {
             return match;
           }
+          const chunk = reference?.chunks?.[chunkIndex];
+          const handleOpenSource = chunk
+            ? handleDocumentButtonClick(
+                chunk.document_id,
+                chunk,
+                getExtension(chunk.document_name),
+                getReferenceInfo(chunkIndex).documentUrl,
+              )
+            : undefined;
 
           return (
             <HoverCard key={i}>
-              <HoverCardTrigger>
-                <bdi className="text-text-secondary bg-bg-card rounded-2xl px-1 mx-1 text-nowrap inline-block">
+              <HoverCardTrigger asChild>
+                <button
+                  type="button"
+                  className="mx-1 inline-block rounded bg-bg-accent px-1.5 text-accent-primary text-xs font-semibold"
+                  onClick={handleOpenSource}
+                  aria-label={`${t('workspace.openSource')} ${chunkIndex + 1}`}
+                >
                   [{chunkIndex + 1}]
-                </bdi>
+                </button>
               </HoverCardTrigger>
               {hasReference && (
                 <HoverCardContent className="max-w-3xl">
@@ -347,7 +361,14 @@ const MarkdownContent = ({
 
       return replacedText;
     },
-    [getPopoverContent, loading, reference?.chunks],
+    [
+      getPopoverContent,
+      loading,
+      reference?.chunks,
+      handleDocumentButtonClick,
+      getReferenceInfo,
+      t,
+    ],
   );
 
   const dir = getDirAttribute(content.replace(citationMarkerReg, ''));

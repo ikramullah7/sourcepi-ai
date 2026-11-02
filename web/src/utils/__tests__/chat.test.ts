@@ -71,7 +71,7 @@ describe('preprocessLaTeX', () => {
     expect(result).toContain('\\right]');
     expect(result).toContain('\\frac{1}{|y|}');
     expect(result).toBe(
-      '$$ C_{seq}(y|x) = \\frac{1}{|y|} \\sum_{t=1}^{|y|} \\right] $$',
+      '$$C_{seq}(y|x) = \\frac{1}{|y|} \\sum_{t=1}^{|y|} \\right]$$',
     );
   });
 
@@ -79,13 +79,13 @@ describe('preprocessLaTeX', () => {
     const content = '\\( f(x) + \\big) \\)';
     const result = preprocessLaTeX(content);
     expect(result).toContain('\\big)');
-    expect(result).toBe('$ f(x) + \\big) $');
+    expect(result).toBe('$f(x) + \\big)$');
   });
 
   it('handles multiple block equations', () => {
     const content = 'First \\[ a \\] then \\[ b \\right] c \\]';
     const result = preprocessLaTeX(content);
-    expect(result).toBe('First $$a$$ then $$ b \\right] c $$');
+    expect(result).toBe('First $$a$$ then $$b \\right] c$$');
   });
 
   it('handles double-escaped inline LaTeX', () => {
@@ -167,4 +167,9 @@ describe('replaceThinkToSection', () => {
   it('leaves text without think markers unchanged', () => {
     expect(replaceThinkToSection('plain answer')).toBe('plain answer');
   });
+});
+
+it('preserves matrix row separators in single-escaped math', () => {
+  const matrix = String.raw`\begin{matrix}a & b \\ c & d\end{matrix}`;
+  expect(preprocessLaTeX(String.raw`\[ ${matrix} \]`)).toBe(`$$${matrix}$$`);
 });

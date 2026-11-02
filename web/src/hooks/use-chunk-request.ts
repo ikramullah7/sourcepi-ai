@@ -16,7 +16,6 @@
 
 import { evictDocumentImage } from '@/components/image';
 import message from '@/components/ui/message';
-import { PaginationProps } from '@/interfaces/antd-compat';
 import { ResponseGetType, ResponseType } from '@/interfaces/database/base';
 import { IChunk, IKnowledgeFile } from '@/interfaces/database/dataset';
 import kbService from '@/services/knowledge-service';
@@ -36,7 +35,7 @@ import {
 export interface IChunkListResult {
   searchString?: string;
   handleInputChange?: React.ChangeEventHandler<HTMLInputElement>;
-  pagination: PaginationProps;
+  pagination: ReturnType<typeof useGetPaginationWithRouter>['pagination'];
   setPagination?: (pagination: { page: number; pageSize?: number }) => void;
   available: number | undefined;
   handleSetAvailable: (available: number | undefined) => void;

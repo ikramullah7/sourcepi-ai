@@ -537,7 +537,7 @@ export default {
       testSetting: 'Sozlash',
       retrievalTesting: 'Qidiruv testi',
       retrievalTestingDescription:
-        'AnswerWhizAI LLM uchun mo‘ljallangan kontentni qaytarib olishini tekshirish uchun qidiruv testini o‘tkazing.',
+        'SourcePi AI LLM uchun mo‘ljallangan kontentni qaytarib olishini tekshirish uchun qidiruv testini o‘tkazing.',
       Parse: 'Tahlil qilish',
       dataset: 'Ma’lumotlar to‘plami',
       testing: 'Qidiruv testi',
@@ -573,10 +573,10 @@ export default {
       noTestResultsForNotRuned:
         'Hali test o‘tkazilmagan. Natijalar shu yerda paydo bo‘ladi.',
       testingDescription:
-        'AnswerWhizAI LLM uchun mo‘ljallangan kontentni qaytarib olishini tekshirish uchun qidiruv testini o‘tkazing. Optimal natijalarga erishish uchun standart sozlamalarni (masalan, kalit so‘z o‘xshashlik og‘irligi yoki o‘xshashlik chegarasi) o‘zgartirgan bo‘lsangiz, bu o‘zgarishlar avtomatik saqlanmasligini yodda tuting. Ularni chat yordamchisi sozlamalariga yoki Qidiruv agent komponenti sozlamalariga qo‘llashingiz kerak.',
+        'SourcePi AI LLM uchun mo‘ljallangan kontentni qaytarib olishini tekshirish uchun qidiruv testini o‘tkazing. Optimal natijalarga erishish uchun standart sozlamalarni (masalan, kalit so‘z o‘xshashlik og‘irligi yoki o‘xshashlik chegarasi) o‘zgartirgan bo‘lsangiz, bu o‘zgarishlar avtomatik saqlanmasligini yodda tuting. Ularni chat yordamchisi sozlamalariga yoki Qidiruv agent komponenti sozlamalariga qo‘llashingiz kerak.',
       similarityThreshold: 'O‘xshashlik chegarasi',
       similarityThresholdTip:
-        'AnswerWhizAI qidiruvda vaznli kalit so‘z o‘xshashligi va vaznli vektor kosinus o‘xshashligi kombinatsiyasidan, yoki reranker modeli tanlanganda vaznli kalit so‘z o‘xshashligi va vaznli qayta reyting balli kombinatsiyasidan foydalanadi. Bu parametr foydalanuvchi so‘rovi va bo‘laklar o‘rtasidagi o‘xshashlik chegarasini belgilaydi. Bu chegaramdan past ball olgan bo‘lak natijalardan chiqarib tashlanadi. Standart bo‘yicha chegara 20 ga teng: gibrid o‘xshashlik balli 20 yoki undan yuqori bo‘lgan bo‘laklargina qidirib olinadi. Agar vektor o‘xshashligi vazni 0 qilib belgilansa, bu chegara qo‘llanilmaydi.',
+        'SourcePi AI qidiruvda vaznli kalit so‘z o‘xshashligi va vaznli vektor kosinus o‘xshashligi kombinatsiyasidan, yoki reranker modeli tanlanganda vaznli kalit so‘z o‘xshashligi va vaznli qayta reyting balli kombinatsiyasidan foydalanadi. Bu parametr foydalanuvchi so‘rovi va bo‘laklar o‘rtasidagi o‘xshashlik chegarasini belgilaydi. Bu chegaramdan past ball olgan bo‘lak natijalardan chiqarib tashlanadi. Standart bo‘yicha chegara 20 ga teng: gibrid o‘xshashlik balli 20 yoki undan yuqori bo‘lgan bo‘laklargina qidirib olinadi. Agar vektor o‘xshashligi vazni 0 qilib belgilansa, bu chegara qo‘llanilmaydi.',
       vectorSimilarityWeight: 'Vektor o‘xshashlik og‘irligi',
       vectorSimilarityWeightTip:
         'Bu gibrid o‘xshashlik ballida vektor o‘xshashligi vaznini belgilaydi — u vektor kosinus o‘xshashligi yoki qayta reyting balli bilan birga ishlatiladi. Ikki vazn yig‘indisi aynan 1.0 bo‘lishi kerak.',
@@ -626,7 +626,7 @@ export default {
       changeSpecificCategory: 'Aniq toifani o‘zgartirish',
       uploadTitle: 'Yuklash uchun faylingizni bu yerga sudrab tashlang',
       uploadDescription:
-        'Bitta yoki ommaviy fayl yuklash qo‘llab-quvvatlanadi. Lokal joylashtirilgan AnswerWhizAI uchun: har bir yuklashda umumiy fayl hajmi chegarasi 1GB, ommaviy yuklash chegarasi 32 fayl. Hisob uchun fayllar umumiy sonining chegarasi yo‘q. hosted deployments uchun: har bir yuklashda umumiy fayl hajmi chegarasi 10MB, har bir fayl 10MB dan oshmasligi va hisob uchun maksimum 128 fayl.',
+        'Bitta yoki ommaviy fayl yuklash qo‘llab-quvvatlanadi. Lokal joylashtirilgan SourcePi AI uchun: har bir yuklashda umumiy fayl hajmi chegarasi 1GB, ommaviy yuklash chegarasi 32 fayl. Hisob uchun fayllar umumiy sonining chegarasi yo‘q. hosted deployments uchun: har bir yuklashda umumiy fayl hajmi chegarasi 10MB, har bir fayl 10MB dan oshmasligi va hisob uchun maksimum 128 fayl.',
       chunk: 'Bo‘lak',
       bulk: 'Ommaviy',
       cancel: 'Bekor qilish',
@@ -634,7 +634,7 @@ export default {
       rerankModel: 'Rerank modeli',
       rerankPlaceholder: 'Qiymatni tanlang',
       rerankTip:
-        'Ixtiyoriy. Bo‘sh qoldirilsa, AnswerWhizAI vaznli kalit so‘z o‘xshashligi va vaznli vektor kosinus o‘xshashligi kombinatsiyasidan foydalanadi; rerank modeli tanlansa, vaznli qayta reyting balli vaznli vektor kosinus o‘xshashligini almashtiradi. Rerank modelidan foydalanish tizimning javob vaqtini sezilarli oshirishini yodda tuting.',
+        'Ixtiyoriy. Bo‘sh qoldirilsa, SourcePi AI vaznli kalit so‘z o‘xshashligi va vaznli vektor kosinus o‘xshashligi kombinatsiyasidan foydalanadi; rerank modeli tanlansa, vaznli qayta reyting balli vaznli vektor kosinus o‘xshashligini almashtiradi. Rerank modelidan foydalanish tizimning javob vaqtini sezilarli oshirishini yodda tuting.',
       topK: 'Top-K',
       topKTip:
         'Rerank modeli bilan birga ishlatiladi; bu sozlama belgilangan rerank modeliga yuboriladigan matn bo‘laklari sonini aniqlaydi.',
@@ -787,7 +787,7 @@ export default {
       tableColumnModeAuto: 'Avtomatik',
       tableColumnModeManual: 'Qo‘lda',
       tableColumnModeAutoDescription:
-        'Barcha ustunlar bo‘lak matniga kiritiladi va metadata sifatida saqlanadi (AnswerWhizAI standarti).',
+        'Barcha ustunlar bo‘lak matniga kiritiladi va metadata sifatida saqlanadi (SourcePi AI standarti).',
       tableColumnRoles: 'Ustun rollari',
       tableColumnRolesTip:
         'Qaysi ustunlar bo‘lak matniga kiritilishini (vektor va to‘liq matn qidiruvi uchun indekslanadi), faqat metadatada qolishini (filtrlanadigan) yoki ikkalasini ham tanlang. O‘zgarishlar yangi tahlillarga qo‘llanadi; rollar kuchga kirishi uchun mavjud hujjatlarni qayta tahlil qiling.',
@@ -1037,7 +1037,7 @@ export default {
         'Rerank nomzodlari Top N dan katta yoki teng bo‘lishi kerak.',
       variable: 'O‘zgaruvchi',
       variableTip:
-        'AnswerWhizAI chat yordamchisini boshqarish API’lari bilan birga ishlatilganda, o‘zgaruvchilar yanada moslashuvchan tizim prompt strategiyalarini ishlab chiqishga yordam beradi. Belgilangan o‘zgaruvchilar ‘Tizim prompti’ tomonidan LLM promptlarining bir qismi sifatida ishlatiladi. {knowledge} — belgilangan to‘plamlardan olingan bo‘laklarni anglatuvchi maxsus zaxira o‘zgaruvchisi, va barcha o‘zgaruvchilar ‘Tizim prompti’da jingalak qavslar {} ichida yozilishi kerak. Tafsilotlar uchun /help.html ga qarang.',
+        'SourcePi AI chat yordamchisini boshqarish API’lari bilan birga ishlatilganda, o‘zgaruvchilar yanada moslashuvchan tizim prompt strategiyalarini ishlab chiqishga yordam beradi. Belgilangan o‘zgaruvchilar ‘Tizim prompti’ tomonidan LLM promptlarining bir qismi sifatida ishlatiladi. {knowledge} — belgilangan to‘plamlardan olingan bo‘laklarni anglatuvchi maxsus zaxira o‘zgaruvchisi, va barcha o‘zgaruvchilar ‘Tizim prompti’da jingalak qavslar {} ichida yozilishi kerak. Tafsilotlar uchun /help.html ga qarang.',
       add: 'Qo‘shish',
       key: 'Kalit',
       variableKeyMessage: 'Iltimos, o‘zgaruvchi kalitini kiriting',
@@ -1132,7 +1132,7 @@ export default {
       extensionTitle: 'Chrome kengaytmasi',
       tokenError: 'Iltimos, avval API Key yarating.',
       betaError:
-        'Iltimos, avval Tizim sozlamalari sahifasidan AnswerWhizAI API Key oling.',
+        'Iltimos, avval Tizim sozlamalari sahifasidan SourcePi AI API Key oling.',
       searching: 'Qidirilmoqda...',
       parsing: 'Tahlil qilinmoqda',
       uploading: 'Yuklanmoqda',
@@ -1567,7 +1567,7 @@ export default {
       webdavRemotePathTip:
         'Ixtiyoriy: WebDAV serveridagi papka yo‘lini kiriting (masalan, /Documents). Root’dan sinxronlash uchun bo‘sh qoldiring.',
       webdavCaCertPathTip:
-        'Ixtiyoriy: AnswerWhizAI konteyneri ichiga ulangan CA sertifikat to‘plami yo‘li.',
+        'Ixtiyoriy: SourcePi AI konteyneri ichiga ulangan CA sertifikat to‘plami yo‘li.',
       google_driveTokenTip:
         'OAuth yordamchisi yoki Google Cloud Console’dan olingan OAuth token JSON’ini yuklang. "installed" yoki "web" ilovasidan olingan client_secret JSON’ni ham yuklashingiz mumkin. Agar bu birinchi sinxronizatsiyangiz bo‘lsa, OAuth roziligini yakunlash uchun brauzer oynasi ochiladi. Agar JSON’da allaqachon refresh token mavjud bo‘lsa, u avtomatik qayta ishlatiladi.',
       google_drivePrimaryAdminTip:
@@ -1649,9 +1649,9 @@ export default {
       sitemapRestrictPdfToDomainTip:
         'Faqat sitemap bilan bir xil domenda joylashgan PDF havolalari kuzatiladi.',
       sitemapUserAgentTip:
-        'Har bir so‘rov bilan yuboriladigan User-Agent sarlavhasi. AnswerWhizAI-SitemapConnector/1.0 ishlatish uchun bo‘sh qoldiring.',
+        'Har bir so‘rov bilan yuboriladigan User-Agent sarlavhasi. SourcePiAI-SitemapConnector/1.0 ishlatish uchun bo‘sh qoldiring.',
       sitemapBatchSizeTip:
-        'Har bir partiyada olinib AnswerWhizAI’ga yuboriladigan sahifalar soni.',
+        'Har bir partiyada olinib SourcePi AI’ga yuboriladigan sahifalar soni.',
       azure_devopsDescription:
         'Repository fayllari va pull requestlarni sinxronlash uchun Azure DevOps’ni ulang.',
       bitbucketDescription:
@@ -2096,7 +2096,7 @@ export default {
         'Har bir yangi yaratilgan ma’lumotlar to‘plami uchun standart LLM.',
       embeddingModel: 'Embedding',
       embeddingModelTip:
-        'Har bir yangi yaratilgan ma’lumotlar to‘plami uchun standart embedding modeli. Ochiladigan ro‘yxatdan embedding modelini topa olmasangiz, AnswerWhizAI slim nashrini ishlatayotganingizni (u embedding modellarini o‘z ichiga olmaydi) yoki model provayderingiz bu modelni qo‘llab-quvvatlashini “Model provayderlari” sahifasidan tekshiring.',
+        'Har bir yangi yaratilgan ma’lumotlar to‘plami uchun standart embedding modeli. Ochiladigan ro‘yxatdan embedding modelini topa olmasangiz, SourcePi AI slim nashrini ishlatayotganingizni (u embedding modellarini o‘z ichiga olmaydi) yoki model provayderingiz bu modelni qo‘llab-quvvatlashini “Model provayderlari” sahifasidan tekshiring.',
       img2txtModel: 'VLM',
       img2txtModelTip:
         'Har bir yangi yaratilgan ma’lumotlar to‘plami uchun standart VLM. Rasm yoki videoni tasvirlaydi. Ochiladigan ro‘yxatdan modelni topa olmasangiz, “Model provayderlari” sahifasidan model provayderingiz bu modelni qo‘llab-quvvatlashini tekshiring.',
@@ -2562,7 +2562,7 @@ export default {
       directory: 'Direktoriya',
       uploadTitle: 'Yuklash uchun faylingizni bu yerga sudrab tashlang',
       uploadDescription:
-        'Bitta yoki ommaviy fayl yuklash qo‘llab-quvvatlanadi. Lokal joylashtirilgan AnswerWhizAI uchun: har bir yuklashda umumiy fayl hajmi chegarasi 1GB, ommaviy yuklash chegarasi 32 fayl. Hisob uchun fayllar umumiy sonining chegarasi yo‘q. hosted deployments uchun: har bir yuklashda umumiy fayl hajmi chegarasi 10MB, har bir fayl 10MB dan oshmasligi va hisob uchun maksimum 128 fayl.',
+        'Bitta yoki ommaviy fayl yuklash qo‘llab-quvvatlanadi. Lokal joylashtirilgan SourcePi AI uchun: har bir yuklashda umumiy fayl hajmi chegarasi 1GB, ommaviy yuklash chegarasi 32 fayl. Hisob uchun fayllar umumiy sonining chegarasi yo‘q. hosted deployments uchun: har bir yuklashda umumiy fayl hajmi chegarasi 10MB, har bir fayl 10MB dan oshmasligi va hisob uchun maksimum 128 fayl.',
       local: 'Lokal yuklashlar',
       s3: 'S3 yuklashlar',
       preview: 'Ko‘rish',
@@ -3843,7 +3843,7 @@ export default {
     },
     admin: {
       loginTitle: 'Admin konsoli',
-      title: 'AnswerWhizAI',
+      title: 'SourcePi AI',
       confirm: 'Tasdiqlash',
       close: 'Yopish',
       yes: 'Ha',

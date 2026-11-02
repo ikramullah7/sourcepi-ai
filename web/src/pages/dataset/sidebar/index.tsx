@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 
 import { RAGFlowAvatar } from '@/components/ragflow-avatar';
+import { PixelMark } from '@/components/pixel-mark';
 import { Button } from '@/components/ui/button';
 import { useSecondPathName } from '@/hooks/route-hook';
 import { cn, formatBytes } from '@/lib/utils';
@@ -17,7 +18,7 @@ import { Routes } from '@/routes';
 import { formatPureDate } from '@/utils/date';
 
 import { IDataset } from '@/interfaces/database/dataset';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 type PropType = {
   refreshCount?: number;
@@ -62,32 +63,42 @@ export function SideBar({ dataset: data }: PropType) {
   }, [t]);
 
   return (
-    <aside className="flex flex-col w-64 relative">
+    <aside className="aw-collection-header">
+      <Link
+        to={Routes.Datasets}
+        className="mb-4 inline-flex text-xs text-text-secondary hover:text-accent-primary"
+      >
+        {t('header.dataset')} /
+      </Link>
       <header
-        className="px-5 pb-4 grid grid-cols-[auto_1fr] grid-rows-[auto_auto] gap-x-3"
+        className="pb-5 grid min-w-0 grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_auto] gap-x-4"
         style={{
           gridTemplateAreas: '"avatar title" "avatar stats"',
         }}
       >
-        <RAGFlowAvatar
-          avatar={data.avatar}
-          name={data.name}
-          className="size-16"
-          style={{ gridArea: 'avatar' }}
-        />
+        {data.avatar ? (
+          <RAGFlowAvatar
+            avatar={data.avatar}
+            name={data.name}
+            className="size-12"
+            style={{ gridArea: 'avatar' }}
+          />
+        ) : (
+          <PixelMark className="size-12 row-span-2 text-accent-primary" />
+        )}
 
-        <h3
-          className="text-lg font-semibold line-clamp-1 text-text-primary text-ellipsis overflow-hidden"
+        <h1
+          className="aw-title truncate text-text-primary"
           style={{ gridArea: 'title' }}
         >
           {data.name}
-        </h3>
+        </h1>
 
         <div
           className="self-end text-text-secondary text-xs overflow-hidden"
           style={{ gridArea: 'stats' }}
         >
-          <div className="flex justify-between">
+          <div className="flex flex-wrap gap-x-4">
             <span>
               {data.document_count} {t('knowledgeDetails.files')}
             </span>
@@ -100,8 +111,8 @@ export function SideBar({ dataset: data }: PropType) {
         </div>
       </header>
 
-      <nav className="px-5 pt-1 pb-5 overflow-y-auto">
-        <ul className="space-y-5">
+      <nav className="overflow-x-auto" aria-label={data.name}>
+        <ul className="flex min-w-max gap-2">
           {items.map((item) => {
             const active = '/' + pathName === item.key;
 
@@ -112,9 +123,11 @@ export function SideBar({ dataset: data }: PropType) {
                   block
                   variant="ghost"
                   className={cn(
-                    'justify-start gap-2.5 px-3 relative h-10 text-base',
-                    active && 'bg-bg-card text-text-primary',
+                    'justify-start gap-2 px-4 relative h-11 rounded-b-none text-sm border-b-2 border-transparent',
+                    active &&
+                      'border-accent-primary bg-bg-accent text-accent-primary',
                   )}
+                  aria-current={active ? 'page' : undefined}
                   to={`${Routes.DatasetBase}${item.key}/${id}`}
                 >
                   {item.icon}

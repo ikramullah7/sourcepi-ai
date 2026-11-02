@@ -95,8 +95,8 @@ const RootProvider = ({ children }: React.PropsWithChildren) => {
     <TooltipProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
-          defaultTheme={ThemeEnum.Dark}
-          storageKey="answerwhizai-ui-theme"
+          defaultTheme={ThemeEnum.Light}
+          storageKey="sourcepi-ui-theme"
         >
           <Root>{children}</Root>
         </ThemeProvider>

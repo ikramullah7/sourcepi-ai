@@ -4,12 +4,9 @@ import { ComponentParams, IChunk } from '../../interface';
 import { parserKeyMap } from './json-parser';
 
 export interface FormatPreserveEditorProps {
-  initialValue: {
-    key: keyof typeof parserKeyMap | 'text' | 'html';
-    type: string;
-    value: Array<{ [key: string]: string }>;
-    params: ComponentParams;
-  };
+  initialValue:
+    | IJsonContainerProps['initialValue']
+    | IObjContainerProps['initialValue'];
   onSave: (value: any) => void;
   className?: string;
   isSelect?: boolean;
@@ -53,7 +50,7 @@ export type IJsonContainerProps = {
 
 export type IObjContainerProps = {
   initialValue: {
-    key: string;
+    key: 'text' | 'html' | 'markdown';
     type: string;
     value: string;
     params: ComponentParams;

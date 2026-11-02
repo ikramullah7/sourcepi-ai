@@ -24,6 +24,7 @@ import { resolveResendOptions } from '../utils';
 import { useCreateConversationBeforeSendMessage } from './use-chat-url';
 import { useFindPrologueFromDialogList } from './use-select-conversation-list';
 import { useUploadFile } from './use-upload-file';
+import { useWorkspaceQuestion } from './use-workspace-question';
 
 /**
  * Subscribes to the current conversation's entry in the chat stream store and
@@ -67,6 +68,7 @@ export const useSendMessage = () => {
   const { conversationId } = useGetChatSearchParams();
   const { t } = useTranslation();
   const { handleInputChange, value, setValue } = useHandleMessageInputChange();
+  useWorkspaceQuestion(setValue);
 
   const { handleUploadFile, isUploading, removeFile, files, clearFiles } =
     useUploadFile();

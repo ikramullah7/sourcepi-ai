@@ -60,7 +60,7 @@ export function JsonValidator({
       clearTimeout(debounceTimerRef.current);
     }
 
-    debounceTimerRef.current = setTimeout(() => {
+    debounceTimerRef.current = window.setTimeout(() => {
       validateJsonAgainstSchema();
     }, 500);
 
@@ -178,12 +178,12 @@ export function JsonValidator({
                 <>
                   <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
                   <p className="text-red-700 font-medium">
-                    {validationResult.errors.length === 1
+                    {validationResult.errors?.length === 1
                       ? validationResult.errors[0].path === '/'
                         ? t.validatorErrorInvalidSyntax
                         : t.validatorErrorSchemaValidation
                       : formatTranslation(t.validatorErrorCount, {
-                          count: validationResult.errors.length,
+                          count: validationResult.errors?.length ?? 0,
                         })}
                   </p>
                 </>

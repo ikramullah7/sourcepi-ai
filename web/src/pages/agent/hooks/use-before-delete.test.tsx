@@ -3,6 +3,9 @@ import { Edge } from '@xyflow/react';
 import { NodeHandleId, Operator } from '../constant';
 import useGraphStore from '../store';
 import { useBeforeDelete } from './use-before-delete';
+type Deletion = Awaited<
+  ReturnType<ReturnType<typeof useBeforeDelete>['handleBeforeDelete']>
+>;
 
 const createNode = (
   id: string,
@@ -53,7 +56,7 @@ describe('useBeforeDelete', () => {
       }),
       createNode('message:0', Operator.Message, { parentId: 'iteration:0' }),
       createNode('message:1', Operator.Message, { parentId: 'message:0' }),
-      createNode('generate:0', Operator.Generate),
+      createNode('generate:0', Operator.Message),
     ];
 
     const edges = [
@@ -66,7 +69,7 @@ describe('useBeforeDelete', () => {
     useGraphStore.setState({ nodes, edges });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [nodes[0] as any],
@@ -102,8 +105,8 @@ describe('useBeforeDelete', () => {
     });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let beginDeletion;
-    let startDeletion;
+    let beginDeletion: Deletion | undefined;
+    let startDeletion: Deletion | undefined;
     await act(async () => {
       beginDeletion = await result.current.handleBeforeDelete({
         nodes: [beginNode as any],
@@ -138,7 +141,7 @@ describe('useBeforeDelete', () => {
     useGraphStore.setState({ nodes, edges });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [],
@@ -161,7 +164,7 @@ describe('useBeforeDelete', () => {
     });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [beginNode as any],
@@ -184,7 +187,7 @@ describe('useBeforeDelete', () => {
     });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [beginNode as any, messageNode as any],
@@ -215,7 +218,7 @@ describe('useBeforeDelete', () => {
     useGraphStore.setState({ nodes, edges });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [nodes[0] as any],
@@ -241,7 +244,7 @@ describe('useBeforeDelete', () => {
       createNode('agent:0', Operator.Agent, { parentId: 'iteration:0' }),
       createNode('tool:0', Operator.Tool),
       createNode('message:0', Operator.Message),
-      createNode('generate:0', Operator.Generate),
+      createNode('generate:0', Operator.Message),
     ];
 
     const edges = [
@@ -258,7 +261,7 @@ describe('useBeforeDelete', () => {
     useGraphStore.setState({ nodes, edges });
 
     const { result } = renderHook(() => useBeforeDelete());
-    let deletion;
+    let deletion: Deletion | undefined;
     await act(async () => {
       deletion = await result.current.handleBeforeDelete({
         nodes: [nodes[0] as any],

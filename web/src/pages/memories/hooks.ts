@@ -14,7 +14,6 @@ import { useDebounce } from 'ahooks';
 import { omit } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams } from 'react-router';
 import { MemoryApiAction } from '../memory/constant';
 import {
   CreateMemoryResponse,
@@ -23,7 +22,6 @@ import {
   ICreateMemoryProps,
   IMemory,
   IMemoryAppDetailProps,
-  MemoryDetailResponse,
   MemoryListResponse,
   MemoryFiltersResponse,
 } from './interface';
@@ -173,40 +171,6 @@ export const useFetchMemoryFilters = () => {
   return { data, isLoading, isError };
 };
 
-export const useFetchMemoryDetail = (tenantId?: string) => {
-  const { id } = useParams();
-
-  const [memoryParams] = useSearchParams();
-  const shared_id = memoryParams.get('shared_id');
-  const memoryId = id || shared_id;
-  let param: { id: string | null; tenant_id?: string } = {
-    id: memoryId,
-  };
-  if (shared_id) {
-    param = {
-      id: memoryId,
-      tenant_id: tenantId,
-    };
-  }
-  const fetchMemoryDetailFunc = shared_id
-    ? memoryService.getMemoryDetailShare
-    : memoryService.getMemoryDetail;
-
-  const { data, isLoading, isError } = useQuery<MemoryDetailResponse, Error>({
-    queryKey: ['memoryDetail', memoryId],
-    enabled: !shared_id || !!tenantId,
-    queryFn: async () => {
-      const { data: response } = await fetchMemoryDetailFunc(param);
-      if (response.code !== 0) {
-        throw new Error(response.message || 'Failed to fetch memory detail');
-      }
-      return response;
-    },
-  });
-
-  return { data: data?.data, isLoading, isError };
-};
-
 export const useDeleteMemory = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -266,7 +230,7 @@ export const useUpdateMemory = () => {
 
       return response.data;
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_data, variables) => {
       message.success(t('message.updated'));
       queryClient.invalidateQueries({
         queryKey: ['memoryDetail', variables.id],

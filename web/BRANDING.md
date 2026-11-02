@@ -1,6 +1,6 @@
-# AnswerWhizAI local frontend
+# SourcePi AI local frontend
 
-The local frontend is branded AnswerWhizAI. Product text, login screens, embedded
+The local frontend is branded SourcePi AI. Product text, login screens, embedded
 pages, navigation, favicon, and logo are maintained in `web/`. Original copyright
 and license notices remain in the source tree.
 

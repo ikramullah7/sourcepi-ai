@@ -24,6 +24,7 @@ export function NodeContextMenu({
 
   const duplicateNode = useCallback(() => {
     const node = getNode(id);
+    if (!node) return;
     const position = {
       x: node?.position?.x || 0 + 50,
       y: node?.position?.y || 0 + 50,
@@ -31,7 +32,7 @@ export function NodeContextMenu({
 
     addNodes({
       ...(node || {}),
-      data: node?.data,
+      data: node.data,
       selected: false,
       dragging: false,
       id: `${node?.id}-copy`,
@@ -76,7 +77,6 @@ export const useHandleNodeContextMenu = (sideWidth: number) => {
 
       // Calculate position of the context menu. We want to make sure it
       // doesn't get positioned off-screen.
-      const pane = ref.current?.getBoundingClientRect();
       // setMenu({
       //   id: node.id,
       //   top: event.clientY < pane.height - 200 ? event.clientY : 0,

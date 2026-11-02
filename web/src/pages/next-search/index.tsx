@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { useFetchUserInfo } from '@/hooks/use-user-setting-request';
 import { Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ISearchAppDetailProps,
   useFetchSearchDetail,
@@ -29,6 +30,7 @@ import { SearchSetting } from './search-setting';
 import SearchingPage from './searching';
 
 export default function SearchPage() {
+  const { t } = useTranslation();
   const [isSearching, setIsSearching] = useState(false);
   const { data: SearchData } = useFetchSearchDetail();
 
@@ -47,13 +49,14 @@ export default function SearchPage() {
       setOpenSetting(false);
     }
   }, [isSearching]);
+  const handleToggleSettings = () => setOpenSetting(!openSetting);
 
   return (
     <section
-      className="size-full flex-1 relative px-5 pb-5 flex pt-4"
+      className="aw-search-detail size-full min-w-0 flex-1 relative p-4 sm:p-6 flex"
       data-testid="search-detail"
     >
-      <div className="flex gap-3 flex-1 min-w-0 bg-bg-base border-0.5 border-border-button">
+      <div className="flex gap-3 flex-1 min-w-0 rounded-xl bg-bg-base">
         <div className="flex-1 min-w-0 overflow-hidden">
           {!isSearching && (
             <div className="animate-fade-in-down h-full overflow-x-hidden overflow-y-auto">
@@ -82,7 +85,7 @@ export default function SearchPage() {
           <SearchSetting
             open={openSetting}
             setOpen={setOpenSetting}
-            className="shrink-0 max-w-full"
+            className="aw-search-settings shrink-0 max-w-full bg-bg-component"
             data={SearchData as ISearchAppDetailProps}
           />
         )}
@@ -90,8 +93,9 @@ export default function SearchPage() {
 
       <Button
         variant="transparent"
-        className="bg-bg-card ml-5 shrink-0"
-        onClick={() => setOpenSetting(!openSetting)}
+        className="bg-bg-card ml-2 shrink-0"
+        aria-label={t('search.searchSettings')}
+        onClick={handleToggleSettings}
       >
         <Settings className="text-text-secondary" />
       </Button>

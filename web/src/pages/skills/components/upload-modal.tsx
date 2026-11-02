@@ -661,8 +661,8 @@ const UploadModal: React.FC<UploadModalProps> = ({
         t('skills.validation.valid') || 'Valid skill format',
       );
 
-      // 4. Upload to AnswerWhizAI
-      setGitProgress('Uploading to AnswerWhizAI...');
+      // 4. Upload to SourcePi AI
+      setGitProgress('Uploading to SourcePi AI...');
       const skillName =
         validation.name || repo.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
 

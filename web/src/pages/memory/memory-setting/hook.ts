@@ -8,7 +8,6 @@ export const useUpdateMemoryConfig = () => {
   const [loading, setLoading] = useState(false);
   const onMemoryRenameOk = useCallback(
     async (data: IMemory) => {
-      let res;
       setLoading(true);
       if (data?.id) {
         // console.log('memory-->', memory, data);
@@ -19,9 +18,7 @@ export const useUpdateMemoryConfig = () => {
             // 'embd_id',
             // 'storage_type',
           ]);
-          res = await updateMemory({
-            // ...memoryDataTemp,
-            // data: data,
+          await updateMemory({
             id: data.id,
             ...params,
           } as unknown as IMemoryAppDetailProps);
