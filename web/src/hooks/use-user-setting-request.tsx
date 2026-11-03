@@ -35,7 +35,7 @@ import userService, {
   listTenantUser,
 } from '@/services/user-service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFetchDefaultModelDictionary } from './use-llm-request';
 
@@ -204,27 +204,6 @@ export const useSaveSetting = (silent = false) => {
   });
 
   return { data, loading, saveSetting: mutateAsync };
-};
-
-export const useFetchSystemVersion = () => {
-  const [version, setVersion] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const fetchSystemVersion = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data } = await userService.getSystemVersion();
-      if (data.code === 0) {
-        setVersion(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.warn(error);
-      setLoading(false);
-    }
-  }, []);
-
-  return { fetchSystemVersion, version, loading };
 };
 
 export const useFetchManualSystemTokenList = () => {

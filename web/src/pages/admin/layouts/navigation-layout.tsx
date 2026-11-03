@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import {
   LucideMonitor,
@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { BrandLogo } from '@/components/brand-logo';
 import { cn } from '@/lib/utils';
 import { Routes } from '@/routes';
-import { getSystemVersion, logout } from '@/services/admin-service';
+import { logout } from '@/services/admin-service';
 
 import authorizationUtil from '@/utils/authorization-util';
 
@@ -29,11 +29,6 @@ const AdminNavigationLayout = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, setCurrentUserInfo] = useContext(CurrentUserInfoContext);
-
-  const { data: version } = useQuery({
-    queryKey: ['admin/version'],
-    queryFn: async () => (await getSystemVersion())?.data?.data?.version,
-  });
 
   const navItems = useMemo(
     () => [
@@ -125,11 +120,7 @@ const AdminNavigationLayout = () => {
         </nav>
 
         <div className="mt-auto space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="leading-none text-xs text-accent-primary">
-              {version}
-            </span>
-
+          <div className="flex justify-end items-center">
             <ThemeSwitch />
           </div>
 

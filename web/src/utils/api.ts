@@ -332,7 +332,6 @@ export default {
   moveFile: `${restAPIv1}/files/move`,
 
   // system
-  getSystemVersion: `${restAPIv1}/system/version`,
   getSystemTokenList: `${restAPIv1}/system/keys`,
   createSystemToken: `${restAPIv1}/system/keys`,
   removeSystemToken: `${restAPIv1}/system/keys`,
@@ -511,8 +510,6 @@ export default {
   adminDeleteWhitelistEntry: (email: string) =>
     `${restAPIv1}/admin/whitelist/${email}`,
   adminImportWhitelist: `${restAPIv1}/admin/whitelist/batch`,
-
-  adminGetSystemVersion: `${restAPIv1}/admin/version`,
 
   // Sandbox settings
   adminListSandboxProviders: `${restAPIv1}/admin/sandbox/providers`,

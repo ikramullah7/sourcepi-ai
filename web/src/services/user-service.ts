@@ -25,7 +25,6 @@ const {
   setting,
   userInfo,
   tenantInfo,
-  getSystemVersion,
   getSystemTokenList,
   removeSystemToken,
   createSystemToken,
@@ -56,10 +55,6 @@ const methods = {
   },
   getTenantInfo: {
     url: tenantInfo,
-    method: 'get',
-  },
-  getSystemVersion: {
-    url: getSystemVersion,
     method: 'get',
   },
   listToken: {
